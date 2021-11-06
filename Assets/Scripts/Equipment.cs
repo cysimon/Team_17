@@ -21,7 +21,7 @@ public class Equipment
 
     public Equipment(Character owner, short type)
     {
-        m_id = Global.equipmentIDCounter++;
+        m_id = Game.equipmentIDCounter++;
         m_owner = owner;
         m_type = type;
         System.Random rand = new System.Random();

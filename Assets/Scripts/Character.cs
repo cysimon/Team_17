@@ -19,7 +19,7 @@ public class Character
 
     public Character(short group)
     {
-        m_id = Global.characterIDCounter++;
+        m_id = Game.characterIDCounter++;
         System.Random rand = new System.Random();
         m_name = Utility.firstNames[rand.Next(8)] + " " + Utility.SurNames[rand.Next(8)];
         m_group = group;
