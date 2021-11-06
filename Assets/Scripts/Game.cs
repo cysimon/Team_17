@@ -12,15 +12,15 @@ public class Game : MonoBehaviour
 
     public static List<Character> m_teamMate;
 
-    public static List<Character> m_enemy = new List<Character> {
-        new Character(0)
-    };
+    public static List<Character> m_enemy;
+
 
     // Start is called before the first frame update
     void Start()
     {
         if (instance == null)
         {
+            // TODO: for test currently
             m_teamMate = new List<Character> {
                 new Character(1), new Character(1), new Character(1)
             };
