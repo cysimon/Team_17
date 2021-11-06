@@ -7,6 +7,14 @@ public class Global
     public static short characterIDCounter = 0;
 
     public static short equipmentIDCounter = 0;
+
+    public static List<Character> teamMate = new List<Character> {
+        new Character(1), new Character(1), new Character(1)
+    };
+
+    public static List<Character> enemy = new List<Character> {
+        new Character(0)
+    };
 }
 
 public class Game : MonoBehaviour
