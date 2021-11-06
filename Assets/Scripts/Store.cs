@@ -13,6 +13,8 @@ public class Store : MonoBehaviour
 
     public Store instance;
 
+    public Texture2DArray storeBackground;
+
     // Start is called before the first frame update
     void Start()
     {
