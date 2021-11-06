@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public class Character : Component
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public short m_id;
+    public string m_name;
+    public short m_group;
+    public Equipment m_armor;
+    public Equipment m_weapon;
+    public short strength;
 
-    // Update is called once per frame
-    void Update()
+    public Character(short group)
     {
-        
+        m_id = Global.characterIDCounter++;
+
+        System.Random rand = new System.Random();
+        m_name = Utility.firstNames[rand.Next(8)] + " " + Utility.SurNames[rand.Next(8)];
+
+        m_group = group;
+
+
     }
 }
