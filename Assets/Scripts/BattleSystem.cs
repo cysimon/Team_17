@@ -53,12 +53,34 @@ public class BattleSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponentInChildren<Unit>();
 
-        for(int i = 0; i < 3; i++)
+        //只有一个enemy
+        //需要考虑加强enemy
+        Character m_enemy = Game.instance.m_enemy[0];
+        enemyUnit.unitName = m_enemy.m_name;
+        enemyUnit.unitId = -1;
+        enemyUnit.characterID = m_enemy.m_id;
+        enemyUnit.maxArmor = m_enemy.m_armor.m_durable;
+        enemyUnit.maxWeaponHealth = m_enemy.m_weapon.m_durable;
+        enemyUnit.unitDamage = m_enemy.m_weapon.m_power;
+
+        //如果多于3个，可以考虑让玩家选择3个，现在取前3个
+        int maxCharacters = Game.instance.m_teammate.Count;
+        Debug.Log(Game.instance.m_teammate.Count);
+        if (maxCharacters >= 3) maxCharacters = 3;
+
+        for(int i = 0; i < maxCharacters; i++)
         {
             GameObject[] teamGO = new GameObject[3];
             teamGO[i] = Instantiate(teammatePrefab, teammateBattleStations[i]);
             teammateUnit[i] = teamGO[i].GetComponentInChildren<Unit>();
+
+            Character m_teammate = Game.instance.m_teammate[i];
+            teammateUnit[i].unitName = m_teammate.m_name;
             teammateUnit[i].unitId = i;
+            teammateUnit[i].characterID = m_teammate.m_id;
+            teammateUnit[i].maxArmor = m_teammate.m_armor.m_durable;
+            teammateUnit[i].maxWeaponHealth = m_teammate.m_weapon.m_durable;
+            teammateUnit[i].unitDamage = m_teammate.m_weapon.m_power;
         }
         
         enemyHUD.SetHUD(enemyUnit);
@@ -78,18 +100,23 @@ public class BattleSystem : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (isTeamDeadArmor[i]) continue;
-            int rand = Random.Range(1, 2);
+            if (isTeamDeadArmor[i]||isTeamDeadWeapon[i]) continue;
+            System.Random rand = new System.Random();
+            int randNum = rand.Next(2);
 
-            if (rand == 1)
+            if (randNum == 1)
+            {
+                if (isEnemyDeadWeapon) randNum = 0;
+                else
+                {
+                    isEnemyDeadWeapon = enemyUnit.TakeDamageWeapon(teammateUnit[i].unitDamage);
+                    enemyHUD.SetWeapon(enemyUnit);
+                }
+            }
+            if (randNum == 0)
             {
                 isEnemyDeadArmor = enemyUnit.TakeDamageArmor(teammateUnit[i].unitDamage);
                 enemyHUD.SetArmor(enemyUnit);
-            }
-            else if (rand == 2)
-            {
-                isEnemyDeadWeapon = enemyUnit.TakeDamageWeapon(teammateUnit[i].unitDamage);
-                enemyHUD.SetWeapon(enemyUnit);
             }
 
             yield return new WaitForSeconds(2f);
@@ -111,24 +138,24 @@ public class BattleSystem : MonoBehaviour
 
     IEnumerator EnemyAttack()
     {
-        int rand1;
+        System.Random rand = new System.Random();
+        int randNum1;
         while (true)
         {
-            rand1 = Random.Range(1, 3);
-            if (!isTeamDeadArmor[rand1]) break;
+            randNum1 = rand.Next(3);
+            if (!isTeamDeadArmor[randNum1]) break;
         }
-        
-        int rand2 = Random.Range(1, 2);
 
-        if (rand2 == 1)
+        int randNum2 = rand.Next(2);
+        if (randNum2 == 0)
         {
-            isTeamDeadArmor[rand1] = teammateUnit[rand1].TakeDamageArmor(enemyUnit.unitDamage);
-            teammateHUD[rand1].SetArmor(teammateUnit[rand1]);
+            isTeamDeadArmor[randNum1] = teammateUnit[randNum1].TakeDamageArmor(enemyUnit.unitDamage);
+            teammateHUD[randNum1].SetArmor(teammateUnit[randNum1]);
         }
-        else if (rand2 == 2)
+        else if (randNum2 == 1&&(!isEnemyDeadWeapon))
         {
-            isTeamDeadWeapon[rand1] = teammateUnit[rand1].TakeDamageWeapon(enemyUnit.unitDamage);
-            teammateHUD[rand1].SetWeapon(teammateUnit[rand1]);
+            isTeamDeadWeapon[randNum1] = teammateUnit[randNum1].TakeDamageWeapon(enemyUnit.unitDamage);
+            teammateHUD[randNum1].SetWeapon(teammateUnit[randNum1]);
         }
 
         yield return new WaitForSeconds(2f);
@@ -140,9 +167,9 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            if (isTeamDeadArmor[rand1])
+            if (isTeamDeadArmor[randNum1])
             {
-                Debug.Log("Teammate " + rand1 + " dead!");
+                Debug.Log("Teammate " + randNum1 + " dead!");
             }
             battleState = BattleState.PLAYERTURN;
             PlayerTurn();

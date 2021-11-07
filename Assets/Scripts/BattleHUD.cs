@@ -15,11 +15,11 @@ public class BattleHUD : MonoBehaviour
     {
         nameText.text = unit.unitName;
 
-        weaponText.text = unit.currentWeaponHealth + " / " + unit.maxWeaponHealth;
+        weaponText.text = "Weapon: " + unit.currentWeaponHealth + " / " + unit.maxWeaponHealth;
         weaponSlider.maxValue = unit.maxWeaponHealth;
         weaponSlider.value = unit.currentWeaponHealth;
 
-        armorText.text = unit.currentArmor + " / " + unit.maxArmor;
+        armorText.text = "Armor: " + unit.currentArmor + " / " + unit.maxArmor;
         armorSlider.maxValue = unit.maxArmor;
         armorSlider.value = unit.currentArmor;
     }

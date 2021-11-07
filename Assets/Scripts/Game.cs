@@ -36,9 +36,9 @@ public class Game : MonoBehaviour
 
     public List<GameObject> m_characters;
 
-    public List<CharacterUI> m_teammate;
+    public List<Character> m_teammate;
 
-    public List<CharacterUI> m_enemy;
+    public List<Character> m_enemy;
 
     public RoundManager m_roundManager;
 
@@ -55,10 +55,10 @@ public class Game : MonoBehaviour
         if (instance == null)
         {
             // TODO: for test currently
-            m_teammate = new List<CharacterUI> {
+            m_teammate = new List<Character> {
                 //new Character(1), new Character(1), new Character(1)
             };
-            m_enemy = new List<CharacterUI> {
+            m_enemy = new List<Character> {
                 //new Character(0)
             };
 
@@ -119,6 +119,7 @@ public class Game : MonoBehaviour
         else if (eventIn.m_type == 2)
         {
             Debug.Log("进入战斗了卧槽");
+            m_enemy.Add(eventIn.m_sender.m_character);
             SceneManager.LoadScene("YiyangLab");
         }
         else if (eventIn.m_type == 3)

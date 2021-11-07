@@ -7,6 +7,7 @@ public class Unit : MonoBehaviour
     public string unitName;
 
     public int unitId = 0;
+    public short characterID;
 
     public int maxWeaponHealth;
     public int currentWeaponHealth;
@@ -19,7 +20,11 @@ public class Unit : MonoBehaviour
     {
         currentArmor -= dmg;
 
-        if (currentArmor <= 0) return true;
+        if (currentArmor <= 0)
+        {
+            currentArmor = 0;
+            return true;
+        }
         else return false;
     }
 
@@ -33,7 +38,11 @@ public class Unit : MonoBehaviour
     {
         currentWeaponHealth -= dmg;
 
-        if (currentWeaponHealth <= 0) return true;
+        if (currentWeaponHealth <= 0)
+        {
+            currentWeaponHealth = 0;
+            return true;
+        }
         else return false;
     }
 
