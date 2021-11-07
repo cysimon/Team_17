@@ -87,7 +87,7 @@ public class Game : MonoBehaviour
         newCharacter.transform.localPosition = new Vector3(610, -120, 0);
         if (type == 1)
         {
-            Vector3 dest = new Vector3(610 - (-200) - 250 * m_teammate.Count, -120 - (-250), 0);
+            Vector3 dest = new Vector3(610 - (-200) - 200 * m_teammate.Count, -120 - (-250), 0);
             Vector3 anime = new Vector3(-1, -1, 0);
             newCharacter.GetComponent<CharacterUI>().MoveTo(dest, anime, 1);
         }
