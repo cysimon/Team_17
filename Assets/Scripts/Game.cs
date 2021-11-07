@@ -30,7 +30,7 @@ public class Game : MonoBehaviour
 
     public static short equipmentIDCounter = 0;
 
-    public short scraps = 1000;
+    public short scraps = 200;
 
     public Text scrapsLable;
 
@@ -93,6 +93,8 @@ public class Game : MonoBehaviour
         GameObject canvas = GameObject.Find("UICanvas");
         newCharacter.transform.parent = canvas.transform;
         newCharacter.transform.localPosition = new Vector3(610, -213, 0);
+        Debug.Log(type);
+        Debug.Log(m_teammate.Count);
         if (type == 1)
         {
             Vector3 dest = new Vector3(630 - (-235) - 200 * m_teammate.Count, 0, 0);

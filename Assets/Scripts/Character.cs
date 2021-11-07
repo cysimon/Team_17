@@ -22,12 +22,13 @@ public class Character
     public Character(short group, CharacterUI ui)
     {
         m_id = Game.characterIDCounter++;
-        System.Random rand = new System.Random();
-        m_name = Utility.firstNames[rand.Next(8)] + " " + Utility.SurNames[rand.Next(8)];
+        System.Random rand1 = new System.Random(9898);
+        System.Random rand2 = new System.Random(9797);
+        m_name = Utility.firstNames[rand1.Next(8)] + " " + Utility.SurNames[rand2.Next(8)];
         m_group = group;
         m_armor = new Equipment(this, 1);
         m_weapon = new Equipment(this, 0);
-        m_strength = (short)rand.Next(21, 41);
+        m_strength = (short)rand1.Next(21, 41);
         m_characterUI = ui;
     }
 
@@ -47,7 +48,7 @@ public class Character
     // return (type, damage)
     public (short, short) doAttack(Character enemy)
     {
-        System.Random rand = new System.Random();
+        System.Random rand = new System.Random(8888);
         short attackType = (short)rand.Next(2);
         short baseAttackVal = (short)(m_strength + m_weapon.m_durable * m_weapon.m_power);
         short damage = (short)rand.Next(baseAttackVal - 5, baseAttackVal + 5);
