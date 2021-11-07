@@ -158,7 +158,7 @@ public class Game : MonoBehaviour
             loseGameObj = loseGame.gameObject;
             GameObject canvas = GameObject.Find("UICanvas");
             loseGameObj.transform.parent = canvas.transform;
-            loseGameObj.transform.localPosition = new Vector3(0, 0, 0);
+            loseGameObj.transform.localPosition = new Vector3(610, -213, 0);
         }
 
         return;
@@ -172,7 +172,7 @@ public class Game : MonoBehaviour
             loseGameObj = loseGame.gameObject;
             GameObject canvas = GameObject.Find("UICanvas");
             loseGameObj.transform.parent = canvas.transform;
-            loseGameObj.transform.localPosition = new Vector3(610, -213, 0);
+            loseGameObj.transform.localPosition = new Vector3(0, 0, 0);
         }
 
         return;
