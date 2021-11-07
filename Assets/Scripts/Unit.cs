@@ -7,6 +7,7 @@ public class Unit : MonoBehaviour
     public string unitName;
 
     public int unitId = 0;
+    public short characterID;
 
     public int maxWeaponHealth;
     public int currentWeaponHealth;

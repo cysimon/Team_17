@@ -84,7 +84,7 @@ public class DialogManager : MonoBehaviour
     private void addTeammateYES(CharacterUI ch)
     {
         m_status = 0;
-        instance.m_teammate.Add(ch);
+        instance.m_teammate.Add(ch.m_character);
         instance.scraps -= 100;
         instance.scrapsLable.text = instance.scraps.ToString();
         List<List<string>> newDialogInfo = new List<List<string>> { };
