@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -178,10 +178,13 @@ MonoBehaviour:
   m_armorNameLabel: {fileID: 4825865027528426792}
   m_powerLabel: {fileID: 4825865029422502473}
   addTeamYes: {fileID: 7552394296274785843, guid: c0af8081142094e7093909bd76a3fe68, type: 3}
+  addTeamYesObj: {fileID: 0}
   addTeamNo: {fileID: 8011703284884133754, guid: 9484587180472425e9f691ca6743d7bb, type: 3}
+  addTeamNoObj: {fileID: 0}
   m_movingDistance: {x: 0, y: 0, z: 0}
   m_movingAnime: {x: 0, y: 0, z: 0}
   m_movingStatus: 0
+  m_spriteRenderer: {fileID: 0}
 --- !u!1 &4825865028550740493
 GameObject:
   m_ObjectHideFlags: 0
