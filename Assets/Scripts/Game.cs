@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class CharacterEvent
 {
     /** 
@@ -117,6 +117,7 @@ public class Game : MonoBehaviour
         else if (eventIn.m_type == 2)
         {
             Debug.Log("进入战斗了卧槽");
+            SceneManager.LoadScene("YiyangLab");
         }
         else if (eventIn.m_type == 3)
         {
