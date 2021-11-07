@@ -20,7 +20,8 @@ public class BattleSystem : MonoBehaviour
 
     Unit enemyUnit;
     Unit[] teammateUnit = new Unit[3];
-    int playerHeal = 20;
+    PlayerUnit playerUnit;
+    int playerHeal;
 
     public BattleHUD enemyHUD;
     public BattleHUD[] teammateHUD = new BattleHUD[3];
@@ -60,6 +61,10 @@ public class BattleSystem : MonoBehaviour
     IEnumerator SetupBattle()
     {
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
+        playerUnit = playerGO.GetComponentInChildren<PlayerUnit>();
+
+        playerUnit.storeLevel = Game.instance.GetLevel();
+        playerHeal = 30 * (playerUnit.storeLevel + 1);
 
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponentInChildren<Unit>();
@@ -358,9 +363,11 @@ public class BattleSystem : MonoBehaviour
             teammateUnit[unitID].RestoreArmor(playerHeal);
             teammateHUD[unitID].SetArmor(teammateUnit[unitID]);
 
+            battleBeginText.text = "You can restore more if your store levels up";
+            attackAni = playerUnit.gameObject.GetComponent<Animator>();
+            attackAni.SetBool("isAttacking", true);
             yield return new WaitForSeconds(2f);
-
-            Debug.Log(unitID);
+            attackAni.SetBool("isAttacking", false);
 
             battleState = BattleState.TEAMMATETURN;
             StartCoroutine(TeammateAttack());
@@ -373,7 +380,11 @@ public class BattleSystem : MonoBehaviour
         teammateUnit[unitID].RestoreWeapon(playerHeal);
         teammateHUD[unitID].SetWeapon(teammateUnit[unitID]);
 
+        battleBeginText.text = "You can restore more if your store levels up";
+        attackAni = playerUnit.gameObject.GetComponent<Animator>();
+        attackAni.SetBool("isAttacking", true);
         yield return new WaitForSeconds(2f);
+        attackAni.SetBool("isAttacking", false);
 
         battleState = BattleState.TEAMMATETURN;
         StartCoroutine(TeammateAttack());
