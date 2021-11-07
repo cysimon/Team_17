@@ -228,6 +228,10 @@ public class DialogManager : MonoBehaviour
             {
                 EventBus.Publish<GameEvent>(new GameEvent(99));
             }
+            else if (m_dialogInfo[curIdx][1] == "GAMESTART")
+            {
+                EventBus.Publish<GameEvent>(new GameEvent(1));
+            }
         }
     }
 

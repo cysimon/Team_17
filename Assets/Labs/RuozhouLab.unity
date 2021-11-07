@@ -238,11 +238,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scraps: 200
+  m_days: 0
   scrapsLable: {fileID: 8532721296399787419}
+  daysLable: {fileID: 8532721296677828821}
   m_characters: []
   m_roundManager: {fileID: 338272232}
   m_dialogManager: {fileID: 338272233}
   characterPrefab: {fileID: 4825865028151275138, guid: b6a6a64192b2743099b8d8423ef04a62, type: 3}
+  loseGamePrefab: {fileID: 1491263274797633935, guid: 8c4439c81065a43589b2459104ef06b2, type: 3}
+  loseGameObj: {fileID: 0}
+  dayBoardPrefab: {fileID: 3185843712320980356, guid: 73946023d45aa4007b1178074ab1136c, type: 3}
+  dayBoardObj: {fileID: 0}
 --- !u!4 &338272231
 Transform:
   m_ObjectHideFlags: 0
@@ -269,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba1d79e6f526c4c5ead540ca8d6a537c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_testList: 01000100010001000000
   m_roundCounter: {fileID: 1391744823}
   instance: {fileID: 0}
 --- !u!114 &338272233
@@ -284,6 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_status: 0
+  m_type: 0
   m_dialogPrefab: {fileID: 6409055857884688396, guid: 8e1c8636908274109a2346a4fa2e99b6, type: 3}
   m_dialogObj: {fileID: 0}
   instance: {fileID: 0}
@@ -358,7 +366,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 10
+  m_Text: 0
 --- !u!222 &1391744824
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -929,7 +937,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 1
+  m_Text: 0
 --- !u!224 &8532721297786333128
 RectTransform:
   m_ObjectHideFlags: 0

@@ -49,6 +49,14 @@ public class Utility
 
     }
 
+    public static List<List<string>> dialogIntro = new List<List<string>> {
+        new List<string> { "You", "Another day in this post-apoc world." },
+        new List<string> { "You", "My job is to fix the equipment of those scavengers." },
+        new List<string> { "You", "The people I helped will help me to fight the bastards who want to destroy my shop." },
+        new List<string> { "You", "Wish me luck." },
+        new List<string> { "T", "GAMESTART" },
+    };
+
     public static List<List<string>> dialogSetWithOthers = new List<List<string>> {
         new List<string> { "", "Hey dude! What a nice day!" },
         new List<string> { "You", "Hi bro. What can I do for you?" },
