@@ -53,8 +53,8 @@ public class CharacterUI : MonoBehaviour
         short speed = 200;
         if (m_movingStatus != 0)
         {
-            if ((m_movingAnime.x <= 0 && m_movingDistance.x < 0) || (m_movingAnime.x >= 0 && m_movingDistance.x > 0) &&
-                (m_movingAnime.y <= 0 && m_movingDistance.y < 0) || (m_movingAnime.y >= 0 && m_movingDistance.y > 0))
+            if ((m_movingAnime.x <= 0 && m_movingDistance.x <= 0) || (m_movingAnime.x >= 0 && m_movingDistance.x > 0) &&
+                (m_movingAnime.y <= 0 && m_movingDistance.y <= 0) || (m_movingAnime.y >= 0 && m_movingDistance.y > 0))
             {
                 Debug.Log("日了狗");
                 EventBus.Publish<CharacterEvent>(new CharacterEvent(m_movingStatus, this));

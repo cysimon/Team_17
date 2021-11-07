@@ -30,6 +30,10 @@ public class Game : MonoBehaviour
 
     public static short equipmentIDCounter = 0;
 
+    public short scraps = 1000;
+
+    public Text scrapsLable;
+
     public List<GameObject> m_characters;
 
     public List<CharacterUI> m_teammate;
@@ -37,6 +41,8 @@ public class Game : MonoBehaviour
     public List<CharacterUI> m_enemy;
 
     public RoundManager m_roundManager;
+
+    public DialogManager m_dialogManager;
 
     public GameObject characterPrefab;
 
@@ -58,6 +64,8 @@ public class Game : MonoBehaviour
 
             m_roundManager.instance = this;
             m_roundManager.NextRound();
+
+            m_dialogManager.instance = this;
 
             characterSub = EventBus.Subscribe<CharacterEvent>(CharacterEventListener);
 
@@ -84,17 +92,17 @@ public class Game : MonoBehaviour
         m_characters.Add(newCharacter);
         GameObject canvas = GameObject.Find("UICanvas");
         newCharacter.transform.parent = canvas.transform;
-        newCharacter.transform.localPosition = new Vector3(610, -120, 0);
+        newCharacter.transform.localPosition = new Vector3(610, -213, 0);
         if (type == 1)
         {
-            Vector3 dest = new Vector3(610 - (-200) - 200 * m_teammate.Count, -120 - (-250), 0);
-            Vector3 anime = new Vector3(-1, -1, 0);
+            Vector3 dest = new Vector3(630 - (-235) - 200 * m_teammate.Count, 0, 0);
+            Vector3 anime = new Vector3(-1, 0, 0);
             newCharacter.GetComponent<CharacterUI>().MoveTo(dest, anime, 1);
         }
         else if (type == 0)
         {
-            Vector3 dest = new Vector3(610 - (740), -120 - (-250), 0);
-            Vector3 anime = new Vector3(1, -1, 0);
+            Vector3 dest = new Vector3(630 - (600), 0, 0);
+            Vector3 anime = new Vector3(-1, 0, 0);
             newCharacter.GetComponent<CharacterUI>().MoveTo(dest, anime, 2);
         }
         
@@ -104,40 +112,18 @@ public class Game : MonoBehaviour
     {
         if (eventIn.m_type == 1)
         {
-            addTeammateDecision(eventIn.m_sender);
+            m_dialogManager.showDialog(Utility.dialogSetWithOthers, eventIn.m_sender.m_character);
         }
         else if (eventIn.m_type == 2)
         {
             Debug.Log("进入战斗了卧槽");
         }
+        else if (eventIn.m_type == 3)
+        {
+            Debug.Log("吸溜吸溜");
+            eventIn.m_sender.gameObject.SetActive(false);
+            instance.m_roundManager.NextRound();
+        }
         return;
-    }
-
-    public void addTeammateDecision(CharacterUI ch)
-    {
-        ch.addTeamYesObj = Instantiate(ch.addTeamYes);
-        ch.addTeamYesObj.transform.parent = ch.gameObject.transform;
-        ch.addTeamYesObj.transform.localPosition = new Vector3(-120, 340, 0);
-        ch.addTeamYesObj.GetComponent<Button>().onClick.AddListener(delegate { addTeammateYES(ch); });
-        ch.addTeamNoObj = Instantiate(ch.addTeamNo);
-        ch.addTeamNoObj.transform.parent = ch.gameObject.transform;
-        ch.addTeamNoObj.transform.localPosition = new Vector3(40, 340, 0);
-        ch.addTeamNoObj.GetComponent<Button>().onClick.AddListener(delegate { addTeammateNO(ch); });
-    }
-
-    private void addTeammateYES(CharacterUI ch)
-    {
-        m_teammate.Add(ch);
-        Destroy(ch.addTeamYesObj);
-        Destroy(ch.addTeamNoObj);
-        m_roundManager.NextRound();
-    }
-
-    private void addTeammateNO(CharacterUI ch)
-    {
-        Destroy(ch.addTeamYesObj);
-        Destroy(ch.addTeamNoObj);
-        Destroy(ch.gameObject);
-        m_roundManager.NextRound();
     }
 }
