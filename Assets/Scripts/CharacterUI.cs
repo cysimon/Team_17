@@ -31,6 +31,8 @@ public class CharacterUI : MonoBehaviour
 
     public short m_movingStatus;
 
+    public GameObject m_spriteRendererPrefab;
+
     public SpriteRenderer m_spriteRenderer;
 
 
@@ -47,7 +49,10 @@ public class CharacterUI : MonoBehaviour
         m_weaponNameLabel.text = "WEAPON: " + m_character.m_weapon.m_name;
         m_armorNameLabel.text = "ARMOR: " + m_character.m_armor.m_name;
         m_powerLabel.text = "POWER: " + m_character.m_strength.ToString();
-        m_spriteRenderer = GameObject.Find("CharSprite").GetComponent<SpriteRenderer>();
+
+
+        GameObject spriteObj = Instantiate(m_spriteRendererPrefab);
+        m_spriteRenderer = spriteObj.GetComponent<SpriteRenderer>();
         m_spriteRenderer.transform.position = new Vector3(6.1f, -2.88f, 0);
         Color temp = m_spriteRenderer.color;
         temp.a = 0.3f;

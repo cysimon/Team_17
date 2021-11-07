@@ -184,6 +184,7 @@ MonoBehaviour:
   m_movingDistance: {x: 0, y: 0, z: 0}
   m_movingAnime: {x: 0, y: 0, z: 0}
   m_movingStatus: 0
+  m_spriteRendererPrefab: {fileID: 7214940426600059117, guid: 17da53dac1cfb4881802d25719b5d369, type: 3}
   m_spriteRenderer: {fileID: 0}
 --- !u!1 &4825865028550740493
 GameObject:
