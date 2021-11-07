@@ -9,6 +9,7 @@ public class CharacterEvent
      * 0: nothing
      * 1: finishedMovingToShelf
      * 2: enter battle round
+     * 3: dead
      * */
     public short m_type = 0;
 
@@ -22,6 +23,22 @@ public class CharacterEvent
 
 }
 
+public class GameEvent
+{
+    /** 
+     * 0: nothing
+     * 1: finishedBattle
+     * 3: dead
+     * */
+    public short m_type = 0;
+
+    public GameEvent(short type)
+    {
+        m_type = type;
+    }
+
+}
+
 public class Game : MonoBehaviour
 {
     public static Game instance;
@@ -30,7 +47,7 @@ public class Game : MonoBehaviour
 
     public static short equipmentIDCounter = 0;
 
-    public short scraps = 1000;
+    public short scraps = 200;
 
     public Text scrapsLable;
 
@@ -93,6 +110,8 @@ public class Game : MonoBehaviour
         GameObject canvas = GameObject.Find("UICanvas");
         newCharacter.transform.parent = canvas.transform;
         newCharacter.transform.localPosition = new Vector3(610, -213, 0);
+        Debug.Log(type);
+        Debug.Log(m_teammate.Count);
         if (type == 1)
         {
             Vector3 dest = new Vector3(630 - (-235) - 200 * m_teammate.Count, 0, 0);

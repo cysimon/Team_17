@@ -11,13 +11,15 @@ public class DialogUI : MonoBehaviour
 
     public Text m_content;
 
-    public Text m_yesDetail;
-
-    public Text m_noDetail;
-
     public Image m_yourAvatar;
 
     public Image m_otherAvatar;
+
+    public Button m_introArmor;
+
+    public Button m_introWeapon;
+
+    public Button m_introSelf;
 
     public Button m_yes;
 
@@ -43,14 +45,15 @@ public class DialogUI : MonoBehaviour
         m_yourAvatar.gameObject.SetActive(true);
         m_content.gameObject.SetActive(true);
         m_content.text = "Emmmmmm";
+        m_introArmor.gameObject.SetActive(true);
+        m_introWeapon.gameObject.SetActive(true);
+        m_introSelf.gameObject.SetActive(true);
         m_yes.gameObject.SetActive(true);
         m_no.gameObject.SetActive(true);
-        m_yesDetail.gameObject.SetActive(true);
-        m_noDetail.gameObject.SetActive(true);
         if (type == "JOIN")
         {
-            m_yesDetail.text = "Lose 100 scraps and get a teammate!";
-            m_noDetail.text = "This guy may become a rubber";
+            m_yes.gameObject.GetComponentInChildren<Text>().text = "Yes (Use 100 scrap. Get teammate)";
+            m_no.gameObject.GetComponentInChildren<Text>().text = "No (This guy may become a rubber)";
         }
     }
 
@@ -69,12 +72,13 @@ public class DialogUI : MonoBehaviour
         m_yourName.gameObject.SetActive(false);
         m_otherName.gameObject.SetActive(false);
         m_content.gameObject.SetActive(false);
-        m_yesDetail.gameObject.SetActive(false);
-        m_noDetail.gameObject.SetActive(false);
         m_yourAvatar.gameObject.SetActive(false);
         m_otherAvatar.gameObject.SetActive(false);
         m_yes.gameObject.SetActive(false);
         m_no.gameObject.SetActive(false);
+        m_introArmor.gameObject.SetActive(false);
+        m_introWeapon.gameObject.SetActive(false);
+        m_introSelf.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update

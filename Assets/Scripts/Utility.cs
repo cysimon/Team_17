@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Utility
 {
@@ -41,6 +42,15 @@ public class Utility
         }
 
         return j;
+    }
+
+    public static int GetRandomSeed()
+    {
+        byte[] bytes = new byte[4];
+        System.Security.Cryptography.RNGCryptoServiceProvider rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
+        rng.GetBytes(bytes);
+        return BitConverter.ToInt32(bytes, 0);
+
     }
 
     public static List<List<string>> dialogSetWithOthers = new List<List<string>> {

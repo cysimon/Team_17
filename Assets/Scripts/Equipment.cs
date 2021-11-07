@@ -24,9 +24,12 @@ public class Equipment
         m_id = Game.equipmentIDCounter++;
         m_owner = owner;
         m_type = type;
-        System.Random rand = new System.Random();
-        m_name = Utility.equipmentNames[rand.Next(5)] + " " + (type == 0? Utility.weaponTypes[rand.Next(3)] : Utility.armorTypes[rand.Next(3)]);
+        System.Random rand1 = new System.Random(Utility.GetRandomSeed());
+        System.Random rand2 = new System.Random(Utility.GetRandomSeed());
+        System.Random rand3 = new System.Random(Utility.GetRandomSeed());
+        m_name = Utility.equipmentNames[rand1.Next(5)] + " " + (type == 0? Utility.weaponTypes[rand2.Next(3)] : Utility.armorTypes[rand3.Next(3)]);
         m_durable = 100;
-        m_power = (short)rand.Next(21, 41);
+        System.Random rand4 = new System.Random(Utility.GetRandomSeed());
+        m_power = (short)rand4.Next(21, 41);
     }
 }

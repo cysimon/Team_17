@@ -50,8 +50,23 @@ public class DialogManager : MonoBehaviour
         newDialog.transform.localPosition = new Vector3(0, (float)-371.53, 0);
 
         m_dialogObj.GetComponent<DialogUI>().m_next.onClick.AddListener(goNext);
+        m_dialogObj.GetComponent<DialogUI>().m_introWeapon.onClick.AddListener(delegate { introWeapon(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_introArmor.onClick.AddListener(delegate { introArmor(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_introSelf.onClick.AddListener(delegate { introSelf(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_yes.onClick.AddListener(delegate { addTeammateYES(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_no.onClick.AddListener(addTeammateNO);
 
         dialogExecute();
+    }
+
+    public void leaveDialog()
+    {
+        m_dialogObj.GetComponent<DialogUI>().m_next.onClick.RemoveListener(goNext);
+        m_dialogObj.GetComponent<DialogUI>().m_introWeapon.onClick.RemoveListener(delegate { introWeapon(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_introArmor.onClick.RemoveListener(delegate { introArmor(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_introSelf.onClick.RemoveListener(delegate { introSelf(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_yes.onClick.RemoveListener(delegate { addTeammateYES(m_other.m_characterUI); });
+        m_dialogObj.GetComponent<DialogUI>().m_no.onClick.RemoveListener(addTeammateNO);
     }
 
     // Start is called before the first frame update
@@ -79,6 +94,41 @@ public class DialogManager : MonoBehaviour
         {
             dialogExecute();
         }   
+    }
+
+    private void introWeapon(CharacterUI ch)
+    {
+        m_status = 0;
+        List<List<string>> newDialogInfo = new List<List<string>> { };
+        newDialogInfo.Add(new List<string> { "", "Of course! My weapon is " + ch.m_character.m_weapon.m_name });
+        newDialogInfo.Add(new List<string> { "", "The weapon power is " + ch.m_character.m_weapon.m_power.ToString() });
+        newDialogInfo.Add(new List<string> { "C", "JOIN" });
+        m_dialogInfo = newDialogInfo;
+        curIdx = 0;
+        dialogExecute();
+    }
+
+    private void introArmor(CharacterUI ch)
+    {
+        m_status = 0;
+        List<List<string>> newDialogInfo = new List<List<string>> { };
+        newDialogInfo.Add(new List<string> { "", "No problem! My armor is " + ch.m_character.m_armor.m_name });
+        newDialogInfo.Add(new List<string> { "", "The armor protect ability is " + ch.m_character.m_armor.m_power.ToString() });
+        newDialogInfo.Add(new List<string> { "C", "JOIN" });
+        m_dialogInfo = newDialogInfo;
+        curIdx = 0;
+        dialogExecute();
+    }
+
+    private void introSelf(CharacterUI ch)
+    {
+        m_status = 0;
+        List<List<string>> newDialogInfo = new List<List<string>> { };
+        newDialogInfo.Add(new List<string> { "", "Well, my name is" + ch.m_character.m_name });
+        newDialogInfo.Add(new List<string> { "C", "JOIN" });
+        m_dialogInfo = newDialogInfo;
+        curIdx = 0;
+        dialogExecute();
     }
 
     private void addTeammateYES(CharacterUI ch)
@@ -126,12 +176,11 @@ public class DialogManager : MonoBehaviour
         else if (m_dialogInfo[curIdx][0] == "C")
         {
             m_dialogObj.GetComponent<DialogUI>().youChoose(m_dialogInfo[curIdx][1]);
-            m_dialogObj.GetComponent<DialogUI>().m_yes.onClick.AddListener(delegate { addTeammateYES(m_other.m_characterUI); });
-            m_dialogObj.GetComponent<DialogUI>().m_no.onClick.AddListener(addTeammateNO);
             m_status = 1;
         }
         else if (m_dialogInfo[curIdx][0] == "T")
         {
+            leaveDialog();
             Destroy(m_dialogObj);
             if (m_dialogInfo[curIdx][1] == "NEXTROUND-Y")
             {
