@@ -17,7 +17,7 @@ public class Utility
     };
 
     public static List<string> weaponTypes = new List<string> {
-        "Laser Gun", "Sonic Cannon", "Electromagnetic Gun"
+        "Laser", "Cannon", "Gun"
     };
 
     public static List<string> armorTypes = new List<string> {

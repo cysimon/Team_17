@@ -14,6 +14,10 @@ public class Game : MonoBehaviour
 
     public static List<Character> m_enemy;
 
+    public RoundManager m_roundManager;
+
+    public GameObject characterPrefab;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +31,10 @@ public class Game : MonoBehaviour
             m_enemy = new List<Character> {
                 new Character(0)
             };
+
+            m_roundManager.instance = this;
+            m_roundManager.NextRound();
+
             instance = this;
         }
         else if (instance != this)
@@ -41,5 +49,19 @@ public class Game : MonoBehaviour
     void Update()
     {
         
+    }
+
+    //public Game getInstance()
+    //{
+    //    return instance;
+    //}
+
+    public void addNewCharacter()
+    {
+        GameObject newCharacter = Instantiate(characterPrefab);
+        GameObject canvas = GameObject.Find("UICanvas");
+        newCharacter.transform.parent = canvas.transform;
+        newCharacter.transform.localPosition = new Vector3(610, -120, 0);
+
     }
 }
