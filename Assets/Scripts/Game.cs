@@ -65,6 +65,12 @@ public class Game : MonoBehaviour
 
     public Subscription<CharacterEvent> characterSub;
 
+    public Subscription<GameEvent> gameSub;
+
+    public GameObject loseGamePrefab;
+
+    public GameObject loseGameObj;
+
 
     // Start is called before the first frame update
     void Start()
@@ -85,6 +91,8 @@ public class Game : MonoBehaviour
             m_dialogManager.instance = this;
 
             characterSub = EventBus.Subscribe<CharacterEvent>(CharacterEventListener);
+
+            gameSub = EventBus.Subscribe<GameEvent>(GameEventListener);
 
             instance = this;
         }
@@ -131,7 +139,7 @@ public class Game : MonoBehaviour
     {
         if (eventIn.m_type == 1)
         {
-            m_dialogManager.showDialog(Utility.dialogSetWithOthers, eventIn.m_sender.m_character);
+            m_dialogManager.showDialog(Utility.dialogSetWithOthers, eventIn.m_sender.m_character, 0);
         }
         else if (eventIn.m_type == 2)
         {
@@ -144,8 +152,32 @@ public class Game : MonoBehaviour
             Destroy(eventIn.m_sender.m_spriteRenderer);
             StartCoroutine(waitForNextRound());
         }
+        else if (eventIn.m_type == 99)
+        {
+            GameObject loseGame = Instantiate(loseGamePrefab);
+            loseGameObj = loseGame.gameObject;
+            GameObject canvas = GameObject.Find("UICanvas");
+            loseGameObj.transform.parent = canvas.transform;
+            loseGameObj.transform.localPosition = new Vector3(0, 0, 0);
+        }
+
         return;
     }
+
+    void GameEventListener(GameEvent eventIn)
+    {
+        if (eventIn.m_type == 99)
+        {
+            GameObject loseGame = Instantiate(loseGamePrefab);
+            loseGameObj = loseGame.gameObject;
+            GameObject canvas = GameObject.Find("UICanvas");
+            loseGameObj.transform.parent = canvas.transform;
+            loseGameObj.transform.localPosition = new Vector3(610, -213, 0);
+        }
+
+        return;
+    }
+ 
 
     private IEnumerator waitForNextRound()
     {
@@ -155,9 +187,26 @@ public class Game : MonoBehaviour
 
     private IEnumerator waitForBattle(Character enemey)
     {
-        yield return new WaitForSeconds(2f);
-        Debug.Log("进入战斗了卧槽");
-        m_enemy.Add(enemey);
-        SceneManager.LoadScene("YiyangLab");
+        yield return new WaitForSeconds(1.5f);
+        List<List<string>> dialogSetWithEnemey = new List<List<string>> {
+            new List<string> { "", "Hey! What a nice day ... for robbery!" },
+            new List<string> { "You", "Yo what's wrong with you man?" },
+            new List<string> { "", "Shut up and give me all your scraps!" },
+        };
+
+        if (instance.m_teammate.Count > 0)
+        {
+            dialogSetWithEnemey.Add(new List<string> { "You", "You know what? Suck my d**k!" });
+            dialogSetWithEnemey.Add(new List<string> { "T", "GOBATTLE" });
+        }
+        else
+        {
+            dialogSetWithEnemey.Add(new List<string> { "You", "Damn it! I don't have any teammate." });
+            dialogSetWithEnemey.Add(new List<string> { "You", "God! Please no!!" });
+            dialogSetWithEnemey.Add(new List<string> { "You", "NOOOOOOOOOOOO!!!!!" });
+            dialogSetWithEnemey.Add(new List<string> { "T", "LOSEGAME" });
+        }
+
+        m_dialogManager.showDialog(dialogSetWithEnemey, enemey, 1);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class DialogEvent
 {
@@ -25,6 +26,9 @@ public class DialogManager : MonoBehaviour
     // 1: in chose making stage
     public short m_status = 0;
 
+    // 1: talk with enemey
+    public short m_type = 0;
+
     public GameObject m_dialogPrefab;
 
     public GameObject m_dialogObj;
@@ -39,11 +43,12 @@ public class DialogManager : MonoBehaviour
 
     public short curIdx = 0;
 
-    public void showDialog(List<List<string>> dialogInfo, Character other)
+    public void showDialog(List<List<string>> dialogInfo, Character other, short type)
     {
         curIdx = 0;
         m_other = other;
         m_dialogInfo = dialogInfo;
+        m_type = type;
 
         GameObject newDialog = Instantiate(m_dialogPrefab);
         m_dialogObj = newDialog.gameObject;
@@ -198,19 +203,30 @@ public class DialogManager : MonoBehaviour
         {
             leaveDialog();
             Destroy(m_dialogObj);
-            CharacterUI curCharacter = instance.m_characters[instance.m_characters.Count - 1].GetComponent<CharacterUI>();
+
             if (m_dialogInfo[curIdx][1] == "NEXTROUND-Y")
             {
-                
+                CharacterUI curCharacter = instance.m_characters[instance.m_characters.Count - 1].GetComponent<CharacterUI>();
                 curCharacter.m_spriteRenderer.transform.localScale = new Vector3(-1, 1, 1);
                 StartCoroutine(waitForNextRound());
             }
             else if (m_dialogInfo[curIdx][1] == "NEXTROUND-N")
             {
+                CharacterUI curCharacter = instance.m_characters[instance.m_characters.Count - 1].GetComponent<CharacterUI>();
                 curCharacter.m_spriteRenderer.transform.localScale = new Vector3(-1, 1, 1);
                 Vector3 dest = new Vector3(curCharacter.transform.localPosition.x - 630, 0, 0);
                 Vector3 anime = new Vector3(1, 0, 0);
                 curCharacter.MoveTo(dest, anime, 3);
+            }
+            else if (m_dialogInfo[curIdx][1] == "GOBATTLE")
+            {
+                Debug.Log("进入战斗了卧槽");
+                instance.m_enemy.Add(m_other);
+                SceneManager.LoadScene("YiyangLab");
+            }
+            else if (m_dialogInfo[curIdx][1] == "LOSEGAME")
+            {
+                EventBus.Publish<GameEvent>(new GameEvent(99));
             }
         }
     }
