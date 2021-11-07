@@ -27,8 +27,11 @@ public class CharacterUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_character = new Character(1);
-        m_groupLabel.text = "GROUP: " + (1).ToString();
+        if (m_character == null)
+        {
+            m_character = new Character(0);
+        }
+        m_groupLabel.text = "GROUP: " + m_character.m_group.ToString();
         m_characterNameLabel.text = "NAME: " + m_character.m_name;
         m_weaponNameLabel.text = "WEAPON: " + m_character.m_weapon.m_name;
         m_armorNameLabel.text = "ARMOR: " + m_character.m_armor.m_name;
