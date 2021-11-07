@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum BattleState { START, PLAYERTURN, TEAMMATETURN, ENEMYTURN, WON, LOST }
 
@@ -26,10 +27,13 @@ public class BattleSystem : MonoBehaviour
 
     bool isEnemyDeadArmor = false;
     bool isEnemyDeadWeapon = false;
-    bool[] isTeamDeadArmor = { false, false, false };
-    bool[] isTeamDeadWeapon = { false, false, false };
+    bool[] isTeamDeadArmor = { true, true, true };
+    bool[] isTeamDeadWeapon = { true, true, true };
 
     public Text battleBeginText;
+    public GameObject[] teamUIContainer;
+    public Button[] restoreButtons;
+    public GameObject enemyUIContainer;
 
     int maxCharacters;
     void Start()
@@ -77,7 +81,7 @@ public class BattleSystem : MonoBehaviour
 
         for(int i = 0; i < maxCharacters; i++)
         {
-            GameObject[] teamGO = new GameObject[3];
+            GameObject[] teamGO = new GameObject[maxCharacters];
             teamGO[i] = Instantiate(teammatePrefab, teammateBattleStations[i]);
             teammateUnit[i] = teamGO[i].GetComponentInChildren<Unit>();
 
@@ -85,17 +89,23 @@ public class BattleSystem : MonoBehaviour
             teammateUnit[i].unitName = m_teammate.m_name;
             teammateUnit[i].unitId = i;
             teammateUnit[i].characterID = m_teammate.m_id;
+
             teammateUnit[i].maxArmor = m_teammate.m_armor.m_durable;
             teammateUnit[i].currentArmor = teammateUnit[i].maxArmor;
+            isTeamDeadArmor[i] = false;
+
             teammateUnit[i].maxWeaponHealth = m_teammate.m_weapon.m_durable;
             teammateUnit[i].currentWeaponHealth = teammateUnit[i].maxWeaponHealth;
+            isTeamDeadWeapon[i] = false;
+            
             teammateUnit[i].unitDamage = m_teammate.m_weapon.m_power;
         }
-        
+        enemyUIContainer.SetActive(true);
         enemyHUD.SetHUD(enemyUnit);
 
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < maxCharacters; i++)
         {
+            teamUIContainer[i].SetActive(true);
             teammateHUD[i].SetHUD(teammateUnit[i]);
         }
 
@@ -110,7 +120,14 @@ public class BattleSystem : MonoBehaviour
         battleBeginText.text = "Teammate's turn";
         battleBeginText.gameObject.SetActive(true);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < maxCharacters; i++)
+        {
+            if (isTeamDeadArmor[i]) continue;
+            restoreButtons[i * 2].gameObject.SetActive(false);
+            restoreButtons[i * 2 + 1].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < maxCharacters; i++)
         {
             if (isTeamDeadArmor[i]||isTeamDeadWeapon[i]) continue;
             System.Random rand = new System.Random();
@@ -212,7 +229,7 @@ public class BattleSystem : MonoBehaviour
         {
             if (isTeamDeadArmor[randNumArray[0]])
             {
-                EventBus.Publish<CharacterEvent>(new CharacterEvent(3, Game.instance.m_teammate[randNumArray[0]].m_characterUI));
+                EventBus.Publish<CharacterEvent>(new CharacterEvent(4, Game.instance.m_teammate[randNumArray[0]].m_characterUI));
                 //À¿¡Àµƒ∂Øª≠
                 yield return new WaitForSeconds(2f);
                 Debug.Log("Teammate " + randNumArray[0] + " dead!");
@@ -234,6 +251,7 @@ public class BattleSystem : MonoBehaviour
             EventBus.Publish<GameEvent>(new GameEvent(2));
             Debug.Log("Game End!");
         }
+        SceneManager.LoadScene("RuozhouLab");
     }
 
     IEnumerator PlayerTurn()
@@ -248,6 +266,13 @@ public class BattleSystem : MonoBehaviour
             yield return new WaitForSeconds(.3f);
         }
         battleBeginText.gameObject.SetActive(true);
+        
+        for(int i = 0; i < maxCharacters; i++)
+        {
+            if (isTeamDeadArmor[i]) continue;
+            restoreButtons[i * 2].gameObject.SetActive(true);
+            restoreButtons[i * 2+1].gameObject.SetActive(true);
+        }
     }
     IEnumerator RestoreArmor(int unitID)
     {
