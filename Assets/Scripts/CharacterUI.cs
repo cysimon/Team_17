@@ -50,7 +50,7 @@ public class CharacterUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        short speed = 200;
+        short speed = 1000;
         if (m_movingStatus != 0)
         {
             if ((m_movingAnime.x <= 0 && m_movingDistance.x <= 0) || (m_movingAnime.x >= 0 && m_movingDistance.x > 0) &&
