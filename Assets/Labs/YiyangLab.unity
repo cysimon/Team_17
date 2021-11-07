@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 106192080}
   - component: {fileID: 106192079}
   m_Layer: 5
-  m_Name: HPText
+  m_Name: WeaponText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -631,7 +631,7 @@ GameObject:
   - component: {fileID: 174986089}
   - component: {fileID: 174986088}
   m_Layer: 5
-  m_Name: HPText
+  m_Name: WeaponText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -741,9 +741,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158aeda6575716f479be1aa709503d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  weaponText: {fileID: 0}
-  hpslider: {fileID: 0}
+  nameText: {fileID: 1431064751}
+  weaponText: {fileID: 528531108}
+  weaponSlider: {fileID: 1972173403}
+  armorText: {fileID: 2024077168}
+  armorSlider: {fileID: 1729839008}
 --- !u!1 &202113604
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,7 +1184,7 @@ GameObject:
   - component: {fileID: 341243766}
   - component: {fileID: 341243767}
   m_Layer: 5
-  m_Name: HPSlider
+  m_Name: WeaponSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1772,7 +1774,7 @@ GameObject:
   - component: {fileID: 505655598}
   - component: {fileID: 505655597}
   m_Layer: 5
-  m_Name: HPText
+  m_Name: WeaponText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1851,7 +1853,7 @@ GameObject:
   - component: {fileID: 528531109}
   - component: {fileID: 528531108}
   m_Layer: 5
-  m_Name: HPText
+  m_Name: WeaponText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2233,7 +2235,7 @@ GameObject:
   - component: {fileID: 624221802}
   - component: {fileID: 624221803}
   m_Layer: 5
-  m_Name: HPSlider
+  m_Name: WeaponSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2473,9 +2475,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158aeda6575716f479be1aa709503d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  weaponText: {fileID: 0}
-  hpslider: {fileID: 0}
+  nameText: {fileID: 449001115}
+  weaponText: {fileID: 1012223048}
+  weaponSlider: {fileID: 2128071968}
+  armorText: {fileID: 1908840767}
+  armorSlider: {fileID: 1088162049}
 --- !u!1 &673213131
 GameObject:
   m_ObjectHideFlags: 0
@@ -2519,9 +2523,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158aeda6575716f479be1aa709503d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  weaponText: {fileID: 0}
-  hpslider: {fileID: 0}
+  nameText: {fileID: 989996887}
+  weaponText: {fileID: 174986088}
+  weaponSlider: {fileID: 341243767}
+  armorText: {fileID: 479437340}
+  armorSlider: {fileID: 202113606}
 --- !u!1 &744307250
 GameObject:
   m_ObjectHideFlags: 0
@@ -2684,9 +2690,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158aeda6575716f479be1aa709503d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  weaponText: {fileID: 0}
-  hpslider: {fileID: 0}
+  nameText: {fileID: 781540065}
+  weaponText: {fileID: 505655597}
+  weaponSlider: {fileID: 1745759333}
+  armorText: {fileID: 563247955}
+  armorSlider: {fileID: 1026774352}
 --- !u!1 &876231167
 GameObject:
   m_ObjectHideFlags: 0
@@ -3000,7 +3008,7 @@ GameObject:
   - component: {fileID: 1012223049}
   - component: {fileID: 1012223048}
   m_Layer: 5
-  m_Name: HPText
+  m_Name: WeaponText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4711,9 +4719,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158aeda6575716f479be1aa709503d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameText: {fileID: 0}
-  weaponText: {fileID: 0}
-  hpslider: {fileID: 0}
+  nameText: {fileID: 489054751}
+  weaponText: {fileID: 106192079}
+  weaponSlider: {fileID: 624221803}
+  armorText: {fileID: 14708039}
+  armorSlider: {fileID: 1429248914}
 --- !u!1 &1643335209
 GameObject:
   m_ObjectHideFlags: 0
@@ -4753,6 +4763,12 @@ MonoBehaviour:
   - {fileID: 648019553}
   - {fileID: 1621833801}
   battleState: 0
+  playerHUD: {fileID: 184608655}
+  enemyHUD: {fileID: 873023386}
+  teammateHUD:
+  - {fileID: 673213133}
+  - {fileID: 648019554}
+  - {fileID: 1621833802}
 --- !u!4 &1643335211
 Transform:
   m_ObjectHideFlags: 0
@@ -4868,7 +4884,7 @@ GameObject:
   - component: {fileID: 1745759332}
   - component: {fileID: 1745759333}
   m_Layer: 5
-  m_Name: HPSlider
+  m_Name: WeaponSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5677,7 +5693,7 @@ GameObject:
   - component: {fileID: 1972173402}
   - component: {fileID: 1972173403}
   m_Layer: 5
-  m_Name: HPSlider
+  m_Name: WeaponSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5996,7 +6012,7 @@ GameObject:
   - component: {fileID: 2128071967}
   - component: {fileID: 2128071968}
   m_Layer: 5
-  m_Name: HPSlider
+  m_Name: WeaponSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

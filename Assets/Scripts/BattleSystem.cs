@@ -16,9 +16,11 @@ public class BattleSystem : MonoBehaviour
 
     public BattleState battleState;
 
-    Unit playerUnit;
     Unit enemyUnit;
     Unit[] teammateUnit = new Unit[3];
+
+    public BattleHUD enemyHUD;
+    public BattleHUD[] teammateHUD = new BattleHUD[3];
 
     // Start is called before the first frame update
     void Start()
@@ -30,16 +32,22 @@ public class BattleSystem : MonoBehaviour
     void SetupBattle()
     {
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
-        playerUnit = playerGO.GetComponent<Unit>();
 
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
-        enemyUnit = enemyGO.GetComponent<Unit>();
+        enemyUnit = enemyGO.GetComponentInChildren<Unit>();
 
         for(int i = 0; i < 3; i++)
         {
             GameObject[] teamGO = new GameObject[3];
             teamGO[i] = Instantiate(teammatePrefab, teammateBattleStations[i]);
-            teammateUnit[i] = playerGO.GetComponent<Unit>();
+            teammateUnit[i] = teamGO[i].GetComponentInChildren<Unit>();
+        }
+        
+        enemyHUD.SetHUD(enemyUnit);
+
+        for(int i = 0; i < 3; i++)
+        {
+            teammateHUD[i].SetHUD(teammateUnit[i]);
         }
     }
 }
