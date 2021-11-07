@@ -40,20 +40,11 @@ public class BattleSystem : MonoBehaviour
     bool[] isTeamDeadArmor = { false, false, false };
     bool[] isTeamDeadWeapon = { false, false, false };
 
-    /*Subscription<clickEvent> subscriptionClick;*/
-    // Start is called before the first frame update
     void Start()
     {
         battleState = BattleState.START;
         StartCoroutine(SetupBattle());
-        /*subscriptionClick = EventBus.Subscribe<clickEvent>(ClickListener);*/
     }
-
-    /*void ClickListener(clickEvent input)
-    {
-        if (input.clickEvents == ClickEvents.ARMOR) OnClickArmor(input.thisUnit);
-        else if (input.clickEvents == ClickEvents.WEAPON) OnClickWeapon(input.thisUnit);
-    }*/
 
     IEnumerator SetupBattle()
     {
@@ -163,6 +154,7 @@ public class BattleSystem : MonoBehaviour
         if(battleState == BattleState.WON)
         {
             Debug.Log("Win! Do something");
+
         }else if(battleState == BattleState.LOST)
         {
             Debug.Log("Game End!");
