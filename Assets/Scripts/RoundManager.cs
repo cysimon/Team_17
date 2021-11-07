@@ -14,7 +14,7 @@ public class RoundManager : MonoBehaviour
     {
         Round newRound = new Round(m_testList[m_roundRecord.Count]);
         m_roundRecord.Add(newRound);
-        instance.addNewCharacter();
+        instance.addNewCharacter(m_testList[m_roundRecord.Count]);
     }
 }
 

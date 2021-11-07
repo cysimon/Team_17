@@ -10,9 +10,11 @@ public class Game : MonoBehaviour
 
     public static short equipmentIDCounter = 0;
 
-    public static List<Character> m_teamMate;
+    public List<GameObject> m_characters;
 
-    public static List<Character> m_enemy;
+    public List<Character> m_teamMate;
+
+    public List<Character> m_enemy;
 
     public RoundManager m_roundManager;
 
@@ -51,17 +53,26 @@ public class Game : MonoBehaviour
         
     }
 
-    //public Game getInstance()
-    //{
-    //    return instance;
-    //}
-
-    public void addNewCharacter()
+    public void addNewCharacter(short type)
     {
         GameObject newCharacter = Instantiate(characterPrefab);
+        newCharacter.GetComponent<CharacterUI>().m_character = new Character(type);
+        m_characters.Add(newCharacter);
         GameObject canvas = GameObject.Find("UICanvas");
         newCharacter.transform.parent = canvas.transform;
         newCharacter.transform.localPosition = new Vector3(610, -120, 0);
+        Vector3 dest = new Vector3(610 - (-50), -120 - (-250), 0);
+        Vector3 anime = new Vector3(-1, -1, 0);
+        newCharacter.GetComponent<CharacterUI>().MoveTo(dest, anime);
+    }
+
+    public void teammateAsk()
+    {
+
+    }
+
+    public void addTeammate()
+    {
 
     }
 }
