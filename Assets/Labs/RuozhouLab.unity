@@ -216,6 +216,7 @@ GameObject:
   m_Component:
   - component: {fileID: 338272231}
   - component: {fileID: 338272230}
+  - component: {fileID: 338272232}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -236,8 +237,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_characters: []
-  m_roundManager: {fileID: 0}
-  characterPrefab: {fileID: 0}
+  m_teammate: []
+  m_enemy: []
+  m_roundManager: {fileID: 338272232}
+  characterPrefab: {fileID: 4825865028151275138, guid: b6a6a64192b2743099b8d8423ef04a62, type: 3}
 --- !u!4 &338272231
 Transform:
   m_ObjectHideFlags: 0
@@ -252,6 +255,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &338272232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338272229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba1d79e6f526c4c5ead540ca8d6a537c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_roundCounter: {fileID: 1391744823}
+  instance: {fileID: 0}
 --- !u!1001 &762883807
 PrefabInstance:
   m_ObjectHideFlags: 0
