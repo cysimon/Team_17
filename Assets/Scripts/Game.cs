@@ -143,6 +143,7 @@ public class Game : MonoBehaviour
         {
             Debug.Log("吸溜吸溜");
             eventIn.m_sender.gameObject.SetActive(false);
+            Destroy(eventIn.m_sender.m_spriteRenderer);
             instance.m_roundManager.NextRound();
         }
         return;
