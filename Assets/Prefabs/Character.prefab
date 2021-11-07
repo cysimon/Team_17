@@ -177,6 +177,11 @@ MonoBehaviour:
   m_weaponNameLabel: {fileID: 4825865028796033786}
   m_armorNameLabel: {fileID: 4825865027528426792}
   m_powerLabel: {fileID: 4825865029422502473}
+  addTeamYes: {fileID: 7552394296274785843, guid: c0af8081142094e7093909bd76a3fe68, type: 3}
+  addTeamNo: {fileID: 8011703284884133754, guid: 9484587180472425e9f691ca6743d7bb, type: 3}
+  m_movingDistance: {x: 0, y: 0, z: 0}
+  m_movingAnime: {x: 0, y: 0, z: 0}
+  m_movingStatus: 0
 --- !u!1 &4825865028550740493
 GameObject:
   m_ObjectHideFlags: 0
