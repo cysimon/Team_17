@@ -49,7 +49,11 @@ public class Game : MonoBehaviour
 
     public short scraps = 200;
 
+    public short m_days = 0;
+
     public Text scrapsLable;
+
+    public Text daysLable;
 
     public List<GameObject> m_characters;
 
@@ -71,22 +75,20 @@ public class Game : MonoBehaviour
 
     public GameObject loseGameObj;
 
+    public GameObject dayBoardPrefab;
+
+    public GameObject dayBoardObj;
+
 
     // Start is called before the first frame update
     void Start()
     {
         if (instance == null)
         {
-            // TODO: for test currently
-            m_teammate = new List<Character> {
-                //new Character(1), new Character(1), new Character(1)
-            };
-            m_enemy = new List<Character> {
-                //new Character(0)
-            };
 
             m_roundManager.instance = this;
-            m_roundManager.NextRound();
+
+            m_days = 0;
 
             m_dialogManager.instance = this;
 
@@ -94,7 +96,13 @@ public class Game : MonoBehaviour
 
             gameSub = EventBus.Subscribe<GameEvent>(GameEventListener);
 
+            GameObject dayboard = Instantiate(dayBoardPrefab);
+            dayBoardObj = dayboard.gameObject;
+            dayBoardObj.SetActive(false);
+
             instance = this;
+
+            m_dialogManager.showDialog(Utility.dialogIntro, new Character(0, null), 1);
         }
         else if (instance != this)
         {
@@ -164,6 +172,45 @@ public class Game : MonoBehaviour
         return;
     }
 
+    public void NextDay()
+    {
+        if (instance.m_teammate != null)
+        {
+            for (int i = 0; i < instance.m_teammate.Count; i++)
+            {
+                Destroy(instance.m_teammate[i].m_characterUI.m_spriteRenderer);
+                Destroy(instance.m_teammate[i].m_characterUI.gameObject);
+            }
+
+            for (int i = 0; i < instance.m_enemy.Count; i++)
+            {
+                Destroy(instance.m_enemy[i].m_characterUI.m_spriteRenderer);
+                Destroy(instance.m_enemy[i].m_characterUI.gameObject);
+            }
+        }
+
+
+        instance.m_teammate = new List<Character>
+        {
+            //new Character(1), new Character(1), new Character(1)
+        };
+
+        instance.m_enemy = new List<Character>
+        {
+            //new Character(0)
+        };
+        instance.m_days += 1;
+        instance.daysLable.text = m_days.ToString();
+        Debug.Log("来了");
+        instance.dayBoardObj.SetActive(true);
+        instance.dayBoardObj.GetComponentInChildren<Text>().text = "DAY " + m_days.ToString();
+        GameObject canvas = GameObject.Find("UICanvas");
+        dayBoardObj.transform.parent = canvas.transform;
+        dayBoardObj.transform.localPosition = new Vector3(0, 0, 0);
+        StartCoroutine(waitForNextDay());
+
+    }
+
     void GameEventListener(GameEvent eventIn)
     {
         if (eventIn.m_type == 99)
@@ -174,10 +221,21 @@ public class Game : MonoBehaviour
             loseGameObj.transform.parent = canvas.transform;
             loseGameObj.transform.localPosition = new Vector3(0, 0, 0);
         }
+        else if (eventIn.m_type == 1)
+        {
+            NextDay();
+        }
 
         return;
     }
- 
+
+    private IEnumerator waitForNextDay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        instance.dayBoardObj.SetActive(false);
+        instance.m_roundManager.m_roundRecord = new List<Round> { };
+        instance.m_roundManager.NextRound();
+    }
 
     private IEnumerator waitForNextRound()
     {
