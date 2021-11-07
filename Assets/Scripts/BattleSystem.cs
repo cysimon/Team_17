@@ -237,9 +237,9 @@ public class BattleSystem : MonoBehaviour
         {
             battleBeginText.text = "Enemy healing";
 
-            isEnemyDeadWeapon = enemyUnit.TakeDamageWeapon(enemyUnit.maxWeaponHealth/2);
+            enemyUnit.RestoreWeapon(enemyUnit.maxWeaponHealth/2);
             enemyHUD.SetWeapon(enemyUnit);
-            isEnemyDeadArmor = enemyUnit.TakeDamageArmor(enemyUnit.maxArmor/4);
+            enemyUnit.RestoreArmor(enemyUnit.maxArmor/4);
             enemyHUD.SetArmor(enemyUnit);
         }
         else if (randNum == 0|| randNum == 1)
