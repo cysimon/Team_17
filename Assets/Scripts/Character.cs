@@ -16,8 +16,10 @@ public class Character
 
     public short m_strength;
 
+    public CharacterUI m_characterUI;
 
-    public Character(short group)
+
+    public Character(short group, CharacterUI ui)
     {
         m_id = Game.characterIDCounter++;
         System.Random rand = new System.Random();
@@ -26,6 +28,7 @@ public class Character
         m_armor = new Equipment(this, 1);
         m_weapon = new Equipment(this, 0);
         m_strength = (short)rand.Next(21, 41);
+        m_characterUI = ui;
     }
 
 

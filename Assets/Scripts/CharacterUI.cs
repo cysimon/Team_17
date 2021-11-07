@@ -17,6 +17,14 @@ public class CharacterUI : MonoBehaviour
 
     public Text m_powerLabel;
 
+    public GameObject addTeamYes;
+
+    public GameObject addTeamYesObj;
+
+    public GameObject addTeamNo;
+
+    public GameObject addTeamNoObj;
+
     public Vector3 m_movingDistance;
 
     public Vector3 m_movingAnime;
@@ -29,7 +37,8 @@ public class CharacterUI : MonoBehaviour
     {
         if (m_character == null)
         {
-            m_character = new Character(0);
+            Debug.Log("sdfsfsd");
+            m_character = new Character(0, this);
         }
         m_groupLabel.text = "GROUP: " + m_character.m_group.ToString();
         m_characterNameLabel.text = "NAME: " + m_character.m_name;
@@ -41,11 +50,12 @@ public class CharacterUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        short speed = 100;
-        if (m_movingStatus == 1)
+        short speed = 200;
+        if (m_movingStatus != 0)
         {
             if (m_movingDistance.x <= 0 && m_movingDistance.y <= 0)
             {
+                EventBus.Publish<CharacterEvent>(new CharacterEvent(m_movingStatus, this));
                 m_movingStatus = 0;
             }
             else
@@ -66,10 +76,10 @@ public class CharacterUI : MonoBehaviour
         }
     }
 
-    public void MoveTo(Vector3 distance, Vector3 anime)
+    public void MoveTo(Vector3 distance, Vector3 anime, short type)
     {
         m_movingDistance = distance;
         m_movingAnime = anime;
-        m_movingStatus = 1;
+        m_movingStatus = type;
     }
 }
