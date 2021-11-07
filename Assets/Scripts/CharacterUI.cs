@@ -45,10 +45,15 @@ public class CharacterUI : MonoBehaviour
             m_character = new Character(0, this);
         }
         m_groupLabel.text = "GROUP: " + m_character.m_group.ToString();
-        m_characterNameLabel.text = "NAME: " + m_character.m_name;
+        m_characterNameLabel.text = m_character.m_name;
         m_weaponNameLabel.text = "WEAPON: " + m_character.m_weapon.m_name;
         m_armorNameLabel.text = "ARMOR: " + m_character.m_armor.m_name;
         m_powerLabel.text = "POWER: " + m_character.m_strength.ToString();
+
+        m_groupLabel.gameObject.SetActive(false);
+        m_weaponNameLabel.gameObject.SetActive(false);
+        m_armorNameLabel.gameObject.SetActive(false);
+        m_powerLabel.gameObject.SetActive(false);
 
 
         GameObject spriteObj = Instantiate(m_spriteRendererPrefab);
@@ -62,12 +67,19 @@ public class CharacterUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_spriteRenderer.color.a < 1.0f)
+        if (m_spriteRenderer.color.a < 1.0f && m_movingStatus == 1)
         {
             Color temp = m_spriteRenderer.color;
             temp.a += 0.01f;
             m_spriteRenderer.color = temp;
         }
+        //else if (m_spriteRenderer.color.a > 0.0f && m_movingStatus == 3)
+        //{
+        //    Color temp = m_spriteRenderer.color;
+        //    temp.a -= 0.01f;
+        //    m_spriteRenderer.color = temp;
+        //}
+
         short speed = 200;
         if (m_movingStatus != 0)
         {
@@ -85,7 +97,7 @@ public class CharacterUI : MonoBehaviour
                     float movingX = m_movingAnime.x * speed * Time.deltaTime;
                     m_movingDistance.x += movingX;
                     this.gameObject.transform.localPosition += new Vector3(movingX, 0, 0);
-                    m_spriteRenderer.transform.position += new Vector3(movingX/100, 0f, 0f);
+                    m_spriteRenderer.transform.position += new Vector3(movingX / 100, 0f, 0f);
                 }
                 if ((m_movingAnime.y <= 0 && m_movingDistance.y > 0) || (m_movingAnime.y >= 0 && m_movingDistance.y < 0))
                 {

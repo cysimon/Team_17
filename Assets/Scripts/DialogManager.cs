@@ -186,14 +186,16 @@ public class DialogManager : MonoBehaviour
         {
             leaveDialog();
             Destroy(m_dialogObj);
+            CharacterUI curCharacter = instance.m_characters[instance.m_characters.Count - 1].GetComponent<CharacterUI>();
             if (m_dialogInfo[curIdx][1] == "NEXTROUND-Y")
             {
+                
+                curCharacter.m_spriteRenderer.transform.localScale = new Vector3(-1, 1, 1);
                 instance.m_roundManager.NextRound();
             }
             else if (m_dialogInfo[curIdx][1] == "NEXTROUND-N")
             {
-                CharacterUI curCharacter = instance.m_characters[instance.m_characters.Count - 1].GetComponent<CharacterUI>();
-                curCharacter.transform.localScale = new Vector3(-1, 1, 1);
+                curCharacter.m_spriteRenderer.transform.localScale = new Vector3(-1, 1, 1);
                 Vector3 dest = new Vector3(curCharacter.transform.localPosition.x - 630, 0, 0);
                 Vector3 anime = new Vector3(1, 0, 0);
                 curCharacter.MoveTo(dest, anime, 3);
