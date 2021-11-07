@@ -36,6 +36,8 @@ public class BattleSystem : MonoBehaviour
     public GameObject enemyUIContainer;
 
     int maxCharacters;
+
+    public Animator attackAni;
     void Start()
     {
         battleState = BattleState.START;
@@ -129,7 +131,20 @@ public class BattleSystem : MonoBehaviour
 
         for (int i = 0; i < maxCharacters; i++)
         {
-            if (isTeamDeadArmor[i]||isTeamDeadWeapon[i]) continue;
+            if (isTeamDeadArmor[i])
+            {
+                battleBeginText.text = "The teammate " + teammateUnit[i].name + " is dead and will never come back";
+                yield return new WaitForSeconds(2f);
+                continue;
+            }
+
+            if (isTeamDeadWeapon[i])
+            {
+                battleBeginText.text = "The teammate " + teammateUnit[i].name + " cannot attack with 0 weaponHP";
+                yield return new WaitForSeconds(2f);
+                continue;
+            }
+
             System.Random rand = new System.Random();
             int randNum = rand.Next(2);
 
@@ -148,10 +163,16 @@ public class BattleSystem : MonoBehaviour
                 enemyHUD.SetArmor(enemyUnit);
             }
 
+            attackAni = teammateUnit[i].gameObject.GetComponent<Animator>();
+            attackAni.SetBool("isAttacking", true);
             yield return new WaitForSeconds(2f);
+            attackAni.SetBool("isAttacking", false);
 
             if (isEnemyDeadArmor)
             {
+                attackAni = enemyUnit.gameObject.GetComponent<Animator>();
+                attackAni.SetBool("isDead", true);
+                yield return new WaitForSeconds(2f);
                 battleState = BattleState.WON;
                 break;
             }
@@ -165,7 +186,7 @@ public class BattleSystem : MonoBehaviour
         }
     }
 
-    int[] shuffle(int[] array)
+    int[] Shuffle(int[] array)
     {
         System.Random rand = new System.Random();
 
@@ -182,10 +203,26 @@ public class BattleSystem : MonoBehaviour
         return array;
     }
 
+    IEnumerator DeathCheck(int i)
+    {
+        if (isTeamDeadArmor[i])
+        {
+            EventBus.Publish<CharacterEvent>(new CharacterEvent(4, Game.instance.m_teammate[i].m_characterUI));
+            //死了的动画
+            attackAni = teammateUnit[i].gameObject.GetComponent<Animator>();
+            attackAni.SetBool("isDead", true);
+            battleBeginText.text = "Teammate " + teammateUnit[i].unitName + " dead!";
+            yield return new WaitForSeconds(2f);
+        }
+    }
+
     IEnumerator EnemyAttack()
     {
+        attackAni = enemyUnit.gameObject.GetComponent<Animator>();
+
         battleBeginText.text = "Enemy's turn";
         battleBeginText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1f);
 
         System.Random rand = new System.Random();
         int[] randNumArray = new int[maxCharacters];
@@ -193,32 +230,67 @@ public class BattleSystem : MonoBehaviour
         {
             randNumArray[i] = i;
         }
-        shuffle(randNumArray);
+        Shuffle(randNumArray);
 
-        int randNum = rand.Next(2);
-        if (randNum == 0 && (!isEnemyDeadWeapon))
+        int randNum = rand.Next(4);
+        if (isEnemyDeadWeapon)
         {
+            battleBeginText.text = "Enemy healing";
+
+            isEnemyDeadWeapon = enemyUnit.TakeDamageWeapon(enemyUnit.maxWeaponHealth/2);
+            enemyHUD.SetWeapon(enemyUnit);
+            isEnemyDeadArmor = enemyUnit.TakeDamageArmor(enemyUnit.maxArmor/4);
+            enemyHUD.SetArmor(enemyUnit);
+        }
+        else if (randNum == 0|| randNum == 1)
+        {
+            battleBeginText.text = "Enemy normal attack";
+
             int attackTarget = randNumArray[0];
             for(int i=0;i< maxCharacters; i++)
             {
                 attackTarget = randNumArray[i];
-                if (!isTeamDeadArmor[i]) break;
+                if (!isTeamDeadArmor[attackTarget]) break;
             }
 
             isTeamDeadArmor[attackTarget] = teammateUnit[attackTarget].TakeDamageArmor(enemyUnit.unitDamage);
             teammateHUD[attackTarget].SetArmor(teammateUnit[attackTarget]);
+
+            StartCoroutine(DeathCheck(attackTarget));
         }
-        else if (randNum == 1&&(!isEnemyDeadWeapon))
+        else if (randNum == 2)
         {
+            battleBeginText.text = "Enemy attack all";
             for (int i = 0; i < maxCharacters; i++)
             {
-                if (isTeamDeadArmor[i]) continue;
-                isTeamDeadWeapon[randNumArray[i]] = teammateUnit[randNumArray[i]].TakeDamageWeapon(enemyUnit.unitDamage);
-                teammateHUD[randNumArray[i]].SetWeapon(teammateUnit[randNumArray[i]]);
-            }           
+                if (isTeamDeadArmor[randNumArray[i]]) continue;
+                isTeamDeadArmor[randNumArray[i]] = teammateUnit[randNumArray[i]].TakeDamageArmor(enemyUnit.unitDamage/2);
+                teammateHUD[randNumArray[i]].SetArmor(teammateUnit[randNumArray[i]]);
+                StartCoroutine(DeathCheck(randNumArray[i]));
+            }
+        }
+        else if (randNum == 3)
+        {
+            battleBeginText.text = "Enemy heavy attack";
+
+            int attackTarget = randNumArray[0];
+            for (int i = 0; i < maxCharacters; i++)
+            {
+                attackTarget = randNumArray[i];
+                if (!isTeamDeadArmor[attackTarget]) break;
+            }
+
+            isTeamDeadArmor[attackTarget] = teammateUnit[attackTarget].TakeDamageArmor(enemyUnit.unitDamage / 2);
+            teammateHUD[attackTarget].SetArmor(teammateUnit[attackTarget]);
+            isTeamDeadWeapon[attackTarget] = teammateUnit[attackTarget].TakeDamageWeapon(enemyUnit.unitDamage);
+            teammateHUD[attackTarget].SetWeapon(teammateUnit[attackTarget]);
+
+            StartCoroutine(DeathCheck(attackTarget));
         }
 
+        attackAni.SetBool("isAttacking", true);
         yield return new WaitForSeconds(2f);
+        attackAni.SetBool("isAttacking", false);
 
         if (isTeamDeadArmor[0] && isTeamDeadArmor[1] && isTeamDeadArmor[2])
         {
@@ -227,13 +299,6 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            if (isTeamDeadArmor[randNumArray[0]])
-            {
-                EventBus.Publish<CharacterEvent>(new CharacterEvent(4, Game.instance.m_teammate[randNumArray[0]].m_characterUI));
-                //死了的动画
-                yield return new WaitForSeconds(2f);
-                Debug.Log("Teammate " + randNumArray[0] + " dead!");
-            }
             battleState = BattleState.PLAYERTURN;
             StartCoroutine(PlayerTurn());
         }
@@ -244,12 +309,9 @@ public class BattleSystem : MonoBehaviour
         if(battleState == BattleState.WON)
         {
             EventBus.Publish<GameEvent>(new GameEvent(1));
-            Debug.Log("Win! Do something");
-
         }else if(battleState == BattleState.LOST)
         {
             EventBus.Publish<GameEvent>(new GameEvent(2));
-            Debug.Log("Game End!");
         }
         SceneManager.LoadScene("RuozhouLab");
     }
