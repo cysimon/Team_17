@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum BattleState { START, PLAYERTURN, TEAMMATETURN, ENEMYTURN, WON, LOST }
-public enum ClickEvents { NOCLICK, ARMOR, WEAPON}
+/*public enum ClickEvents { NOCLICK, ARMOR, WEAPON}
 public class clickEvent
 {
     public ClickEvents clickEvents;
@@ -14,7 +14,7 @@ public class clickEvent
         clickEvents = input;
         thisUnit = inputUnit;
     }
-}
+}*/
 
 public class BattleSystem : MonoBehaviour
 {
@@ -40,20 +40,20 @@ public class BattleSystem : MonoBehaviour
     bool[] isTeamDeadArmor = { false, false, false };
     bool[] isTeamDeadWeapon = { false, false, false };
 
-    Subscription<clickEvent> subscriptionClick;
+    /*Subscription<clickEvent> subscriptionClick;*/
     // Start is called before the first frame update
     void Start()
     {
         battleState = BattleState.START;
         StartCoroutine(SetupBattle());
-        subscriptionClick = EventBus.Subscribe<clickEvent>(ClickListener);
+        /*subscriptionClick = EventBus.Subscribe<clickEvent>(ClickListener);*/
     }
 
-    void ClickListener(clickEvent input)
+    /*void ClickListener(clickEvent input)
     {
         if (input.clickEvents == ClickEvents.ARMOR) OnClickArmor(input.thisUnit);
         else if (input.clickEvents == ClickEvents.WEAPON) OnClickWeapon(input.thisUnit);
-    }
+    }*/
 
     IEnumerator SetupBattle()
     {
@@ -153,6 +153,7 @@ public class BattleSystem : MonoBehaviour
             {
                 Debug.Log("Teammate " + rand1 + " dead!");
             }
+            battleState = BattleState.PLAYERTURN;
             PlayerTurn();
         }
     }
@@ -170,42 +171,44 @@ public class BattleSystem : MonoBehaviour
 
     void PlayerTurn()
     {
-        Debug.Log("Youe turn");
+        Debug.Log("Your turn");
     }
-    IEnumerator RestoreArmor(Unit teammateUnit)
+    IEnumerator RestoreArmor(int unitID)
     {
-        teammateUnit.RestoreArmor(playerHeal);
-        teammateHUD[teammateUnit.unitId].SetArmor(teammateUnit);
+        teammateUnit[unitID].RestoreArmor(playerHeal);
+        teammateHUD[unitID].SetArmor(teammateUnit[unitID]);
+
+        yield return new WaitForSeconds(2f);
+
+        Debug.Log(unitID);
+
+        battleState = BattleState.TEAMMATETURN;
+        StartCoroutine(TeammateAttack());
+    }
+    IEnumerator RestoreWeapon(int unitID)
+    {
+        teammateUnit[unitID].RestoreWeapon(playerHeal);
+        teammateHUD[unitID].SetWeapon(teammateUnit[unitID]);
 
         yield return new WaitForSeconds(2f);
 
         battleState = BattleState.TEAMMATETURN;
         StartCoroutine(TeammateAttack());
     }
-    IEnumerator RestoreWeapon(Unit teammateUnit)
-    {
-        teammateUnit.RestoreWeapon(playerHeal);
-        teammateHUD[teammateUnit.unitId].SetWeapon(teammateUnit);
 
-        yield return new WaitForSeconds(2f);
-
-        battleState = BattleState.TEAMMATETURN;
-        StartCoroutine(TeammateAttack());
-    }
-
-    public void OnClickArmor(Unit teammateUnit)
+    public void OnClickArmor(int unitID)
     {
         if (battleState != BattleState.PLAYERTURN)
             return;
 
-        StartCoroutine(RestoreArmor(teammateUnit));
+        StartCoroutine(RestoreArmor(unitID));
     }
 
-    public void OnClickWeapon(Unit teammateUnit)
+    public void OnClickWeapon(int unitID)
     {
         if (battleState != BattleState.PLAYERTURN)
             return;
 
-        StartCoroutine(RestoreWeapon(teammateUnit));
+        StartCoroutine(RestoreWeapon(unitID));
     }
 }

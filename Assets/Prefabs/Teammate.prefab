@@ -98,9 +98,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Teammate1
+  unitId: 0
   maxWeaponHealth: 100
   currentWeaponHealth: 100
-  unitDamage: 50
+  unitDamage: 20
   maxArmor: 100
   currentArmor: 100
 --- !u!114 &4738370636691528888
