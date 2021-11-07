@@ -30,6 +30,8 @@ public class BattleSystem : MonoBehaviour
     bool[] isTeamDeadWeapon = { false, false, false };
 
     public Text battleBeginText;
+
+    int maxCharacters;
     void Start()
     {
         battleState = BattleState.START;
@@ -69,7 +71,7 @@ public class BattleSystem : MonoBehaviour
         enemyUnit.unitDamage = m_enemy.m_weapon.m_power+20;
 
         //如果多于3个，可以考虑让玩家选择3个，现在取前3个
-        int maxCharacters = Game.instance.m_teammate.Count;
+        maxCharacters = Game.instance.m_teammate.Count;
         //Debug.Log(Game.instance.m_teammate.Count);
         if (maxCharacters >= 3) maxCharacters = 3;
 
@@ -169,18 +171,34 @@ public class BattleSystem : MonoBehaviour
         battleBeginText.gameObject.SetActive(true);
 
         System.Random rand = new System.Random();
-        int[] randNumArray = shuffle(new int[] { 0,1,2});
+        int[] randNumArray = new int[maxCharacters];
+        for(int i=0;i< maxCharacters; i++)
+        {
+            randNumArray[i] = i;
+        }
+        shuffle(randNumArray);
 
         int randNum = rand.Next(2);
         if (randNum == 0 && (!isEnemyDeadWeapon))
         {
-            isTeamDeadArmor[randNumArray[0]] = teammateUnit[randNumArray[0]].TakeDamageArmor(enemyUnit.unitDamage);
-            teammateHUD[randNumArray[0]].SetArmor(teammateUnit[randNumArray[0]]);
+            int attackTarget = randNumArray[0];
+            for(int i=0;i< maxCharacters; i++)
+            {
+                attackTarget = randNumArray[i];
+                if (!isTeamDeadArmor[i]) break;
+            }
+
+            isTeamDeadArmor[attackTarget] = teammateUnit[attackTarget].TakeDamageArmor(enemyUnit.unitDamage);
+            teammateHUD[attackTarget].SetArmor(teammateUnit[attackTarget]);
         }
         else if (randNum == 1&&(!isEnemyDeadWeapon))
         {
-            isTeamDeadWeapon[randNumArray[0]] = teammateUnit[randNumArray[0]].TakeDamageWeapon(enemyUnit.unitDamage);
-            teammateHUD[randNumArray[0]].SetWeapon(teammateUnit[randNumArray[0]]);
+            for (int i = 0; i < maxCharacters; i++)
+            {
+                if (isTeamDeadArmor[i]) continue;
+                isTeamDeadWeapon[randNumArray[i]] = teammateUnit[randNumArray[i]].TakeDamageWeapon(enemyUnit.unitDamage);
+                teammateHUD[randNumArray[i]].SetWeapon(teammateUnit[randNumArray[i]]);
+            }           
         }
 
         yield return new WaitForSeconds(2f);
@@ -194,6 +212,8 @@ public class BattleSystem : MonoBehaviour
         {
             if (isTeamDeadArmor[randNumArray[0]])
             {
+                EventBus.Publish<CharacterEvent>(new CharacterEvent(3, Game.instance.m_teammate[randNumArray[0]].m_characterUI));
+                //死了的动画
                 yield return new WaitForSeconds(2f);
                 Debug.Log("Teammate " + randNumArray[0] + " dead!");
             }
@@ -206,10 +226,12 @@ public class BattleSystem : MonoBehaviour
     {
         if(battleState == BattleState.WON)
         {
+            EventBus.Publish<GameEvent>(new GameEvent(1));
             Debug.Log("Win! Do something");
 
         }else if(battleState == BattleState.LOST)
         {
+            EventBus.Publish<GameEvent>(new GameEvent(2));
             Debug.Log("Game End!");
         }
     }

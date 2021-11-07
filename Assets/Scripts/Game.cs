@@ -9,6 +9,7 @@ public class CharacterEvent
      * 0: nothing
      * 1: finishedMovingToShelf
      * 2: enter battle round
+     * 3: dead
      * */
     public short m_type = 0;
 
@@ -18,6 +19,22 @@ public class CharacterEvent
     {
         m_type = type;
         m_sender = sender;
+    }
+
+}
+
+public class GameEvent
+{
+    /** 
+     * 0: nothing
+     * 1: finishedBattle
+     * 3: dead
+     * */
+    public short m_type = 0;
+
+    public GameEvent(short type)
+    {
+        m_type = type;
     }
 
 }
