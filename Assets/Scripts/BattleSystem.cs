@@ -100,19 +100,23 @@ public class BattleSystem : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            if (isTeamDeadArmor[i]) continue;
+            if (isTeamDeadArmor[i]||isTeamDeadWeapon[i]) continue;
             System.Random rand = new System.Random();
             int randNum = rand.Next(2);
 
             if (randNum == 1)
             {
+                if (isEnemyDeadWeapon) randNum = 0;
+                else
+                {
+                    isEnemyDeadWeapon = enemyUnit.TakeDamageWeapon(teammateUnit[i].unitDamage);
+                    enemyHUD.SetWeapon(enemyUnit);
+                }
+            }
+            if (randNum == 0)
+            {
                 isEnemyDeadArmor = enemyUnit.TakeDamageArmor(teammateUnit[i].unitDamage);
                 enemyHUD.SetArmor(enemyUnit);
-            }
-            else if (randNum == 2)
-            {
-                isEnemyDeadWeapon = enemyUnit.TakeDamageWeapon(teammateUnit[i].unitDamage);
-                enemyHUD.SetWeapon(enemyUnit);
             }
 
             yield return new WaitForSeconds(2f);
@@ -135,21 +139,20 @@ public class BattleSystem : MonoBehaviour
     IEnumerator EnemyAttack()
     {
         System.Random rand = new System.Random();
-        int randNum1 = rand.Next(3);
+        int randNum1;
         while (true)
         {
-            randNum1 = Random.Range(1, 3);
+            randNum1 = rand.Next(3);
             if (!isTeamDeadArmor[randNum1]) break;
         }
 
         int randNum2 = rand.Next(2);
-
-        if (randNum2 == 1)
+        if (randNum2 == 0)
         {
             isTeamDeadArmor[randNum1] = teammateUnit[randNum1].TakeDamageArmor(enemyUnit.unitDamage);
             teammateHUD[randNum1].SetArmor(teammateUnit[randNum1]);
         }
-        else if (randNum2 == 2)
+        else if (randNum2 == 1&&(!isEnemyDeadWeapon))
         {
             isTeamDeadWeapon[randNum1] = teammateUnit[randNum1].TakeDamageWeapon(enemyUnit.unitDamage);
             teammateHUD[randNum1].SetWeapon(teammateUnit[randNum1]);
