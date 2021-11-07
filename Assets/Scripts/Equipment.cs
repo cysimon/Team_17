@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Equipment
 {
@@ -24,9 +25,9 @@ public class Equipment
         m_id = Game.equipmentIDCounter++;
         m_owner = owner;
         m_type = type;
-        System.Random rand1 = new System.Random(Utility.GetRandomSeed());
-        System.Random rand2 = new System.Random(Utility.GetRandomSeed());
-        System.Random rand3 = new System.Random(Utility.GetRandomSeed());
+        System.Random rand1 = new System.Random(unchecked((int)DateTime.Now.Ticks));
+        System.Random rand2 = new System.Random(unchecked((int)DateTime.Now.Ticks));
+        System.Random rand3 = new System.Random(unchecked((int)DateTime.Now.Ticks));
         m_name = Utility.equipmentNames[rand1.Next(5)] + " " + (type == 0? Utility.weaponTypes[rand2.Next(3)] : Utility.armorTypes[rand3.Next(3)]);
         m_durable = 100;
         System.Random rand4 = new System.Random(Utility.GetRandomSeed());

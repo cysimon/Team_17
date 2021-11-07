@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class DialogUI : MonoBehaviour
 {
@@ -50,11 +51,6 @@ public class DialogUI : MonoBehaviour
         m_introSelf.gameObject.SetActive(true);
         m_yes.gameObject.SetActive(true);
         m_no.gameObject.SetActive(true);
-        if (type == "JOIN")
-        {
-            m_yes.gameObject.GetComponentInChildren<Text>().text = "Yes (Use 100 scrap. Get teammate)";
-            m_no.gameObject.GetComponentInChildren<Text>().text = "No (This guy may become a rubber)";
-        }
     }
 
     public void otherTalk(string content, string otherName)

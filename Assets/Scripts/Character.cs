@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Character
 {
@@ -16,19 +17,23 @@ public class Character
 
     public short m_strength;
 
+    public short m_cost;
+
     public CharacterUI m_characterUI;
 
 
     public Character(short group, CharacterUI ui)
     {
         m_id = Game.characterIDCounter++;
-        System.Random rand1 = new System.Random(9898);
-        System.Random rand2 = new System.Random(9797);
-        m_name = Utility.firstNames[rand1.Next(8)] + " " + Utility.SurNames[rand2.Next(8)];
+        System.Random rand1 = new System.Random(unchecked((int)DateTime.Now.Ticks));
+        System.Random rand2 = new System.Random(unchecked((int)DateTime.Now.Ticks));
+        System.Random rand3 = new System.Random(unchecked((int)DateTime.Now.Ticks));
+        m_name = Utility.firstNames[rand1.Next(8)];
         m_group = group;
         m_armor = new Equipment(this, 1);
         m_weapon = new Equipment(this, 0);
-        m_strength = (short)rand1.Next(21, 41);
+        m_strength = (short)rand2.Next(21, 41);
+        m_cost = (short)(rand1.Next(-5, 5) * 5 + 100);
         m_characterUI = ui;
     }
 

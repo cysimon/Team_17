@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class DialogEvent
 {
@@ -100,8 +102,8 @@ public class DialogManager : MonoBehaviour
     {
         m_status = 0;
         List<List<string>> newDialogInfo = new List<List<string>> { };
-        newDialogInfo.Add(new List<string> { "", "Of course! My weapon is " + ch.m_character.m_weapon.m_name });
-        newDialogInfo.Add(new List<string> { "", "The weapon power is " + ch.m_character.m_weapon.m_power.ToString() });
+        newDialogInfo.Add(new List<string> { "", "Of course! My weapon is " + ch.m_character.m_weapon.m_name + "." });
+        newDialogInfo.Add(new List<string> { "", "The weapon power is " + ch.m_character.m_weapon.m_power.ToString() + "." });
         newDialogInfo.Add(new List<string> { "C", "JOIN" });
         m_dialogInfo = newDialogInfo;
         curIdx = 0;
@@ -112,8 +114,8 @@ public class DialogManager : MonoBehaviour
     {
         m_status = 0;
         List<List<string>> newDialogInfo = new List<List<string>> { };
-        newDialogInfo.Add(new List<string> { "", "No problem! My armor is " + ch.m_character.m_armor.m_name });
-        newDialogInfo.Add(new List<string> { "", "The armor protect ability is " + ch.m_character.m_armor.m_power.ToString() });
+        newDialogInfo.Add(new List<string> { "", "No problem! My armor is " + ch.m_character.m_armor.m_name + "."});
+        newDialogInfo.Add(new List<string> { "", "The armor protect ability is " + ch.m_character.m_armor.m_power.ToString() + "." });
         newDialogInfo.Add(new List<string> { "C", "JOIN" });
         m_dialogInfo = newDialogInfo;
         curIdx = 0;
@@ -124,7 +126,7 @@ public class DialogManager : MonoBehaviour
     {
         m_status = 0;
         List<List<string>> newDialogInfo = new List<List<string>> { };
-        newDialogInfo.Add(new List<string> { "", "Well, my name is" + ch.m_character.m_name });
+        newDialogInfo.Add(new List<string> { "", "Well, my name is " + ch.m_character.m_name + "." });
         newDialogInfo.Add(new List<string> { "C", "JOIN" });
         m_dialogInfo = newDialogInfo;
         curIdx = 0;
@@ -135,7 +137,7 @@ public class DialogManager : MonoBehaviour
     {
         m_status = 0;
         instance.m_teammate.Add(ch.m_character);
-        instance.scraps -= 100;
+        instance.scraps -= m_other.m_cost;
         instance.scrapsLable.text = instance.scraps.ToString();
         List<List<string>> newDialogInfo = new List<List<string>> { };
         newDialogInfo.Add(new List<string> { "You", "Here you go! Nice and clean again!" });
@@ -176,6 +178,8 @@ public class DialogManager : MonoBehaviour
         else if (m_dialogInfo[curIdx][0] == "C")
         {
             m_dialogObj.GetComponent<DialogUI>().youChoose(m_dialogInfo[curIdx][1]);
+            m_dialogObj.GetComponent<DialogUI>().m_yes.gameObject.GetComponentInChildren<Text>().text = "Yes (Use " + m_other.m_cost.ToString() + " scrap. Get teammate)";
+            m_dialogObj.GetComponent<DialogUI>().m_no.gameObject.GetComponentInChildren<Text>().text = "No (This guy may become a rubber)";
             m_status = 1;
         }
         else if (m_dialogInfo[curIdx][0] == "T")
