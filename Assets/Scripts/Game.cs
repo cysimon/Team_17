@@ -62,6 +62,8 @@ public class Game : MonoBehaviour
         GameObject canvas = GameObject.Find("UICanvas");
         newCharacter.transform.parent = canvas.transform;
         newCharacter.transform.localPosition = new Vector3(610, -120, 0);
-
+        Vector3 dest = new Vector3(610 - (-50), -120 - (-250), 0);
+        Vector3 anime = new Vector3(-1, -1, 0);
+        newCharacter.GetComponent<CharacterUI>().MoveTo(dest, anime);
     }
 }

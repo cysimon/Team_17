@@ -17,6 +17,12 @@ public class CharacterUI : MonoBehaviour
 
     public Text m_powerLabel;
 
+    public Vector3 m_movingDistance;
+
+    public Vector3 m_movingAnime;
+
+    public short m_movingStatus;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +38,35 @@ public class CharacterUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        short speed = 100;
+        if (m_movingStatus == 1)
+        {
+            if (m_movingDistance.x <= 0 && m_movingDistance.y <= 0)
+            {
+                m_movingStatus = 0;
+            }
+            else
+            {
+                if (m_movingDistance.x > 0)
+                {
+                    float movingX = m_movingAnime.x * speed * Time.deltaTime;
+                    m_movingDistance.x += movingX;
+                    this.gameObject.transform.localPosition += new Vector3(movingX, 0, 0);
+                }
+                if (m_movingDistance.y > 0)
+                {
+                    float movingY = m_movingAnime.y * speed * Time.deltaTime;
+                    m_movingDistance.y += movingY;
+                    this.gameObject.transform.localPosition += new Vector3(0, m_movingAnime.y * speed * Time.deltaTime, 0);
+                }
+            }
+        }
+    }
+
+    public void MoveTo(Vector3 distance, Vector3 anime)
+    {
+        m_movingDistance = distance;
+        m_movingAnime = anime;
+        m_movingStatus = 1;
     }
 }
