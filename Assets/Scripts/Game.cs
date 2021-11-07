@@ -135,17 +135,29 @@ public class Game : MonoBehaviour
         }
         else if (eventIn.m_type == 2)
         {
-            Debug.Log("进入战斗了卧槽");
-            m_enemy.Add(eventIn.m_sender.m_character);
-            SceneManager.LoadScene("YiyangLab");
+            StartCoroutine(waitForBattle(eventIn.m_sender.m_character));
         }
         else if (eventIn.m_type == 3)
         {
             Debug.Log("吸溜吸溜");
             eventIn.m_sender.gameObject.SetActive(false);
             Destroy(eventIn.m_sender.m_spriteRenderer);
-            instance.m_roundManager.NextRound();
+            StartCoroutine(waitForNextRound());
         }
         return;
+    }
+
+    private IEnumerator waitForNextRound()
+    {
+        yield return new WaitForSeconds(1f);
+        instance.m_roundManager.NextRound();
+    }
+
+    private IEnumerator waitForBattle(Character enemey)
+    {
+        yield return new WaitForSeconds(2f);
+        Debug.Log("进入战斗了卧槽");
+        m_enemy.Add(enemey);
+        SceneManager.LoadScene("YiyangLab");
     }
 }

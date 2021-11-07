@@ -58,10 +58,8 @@ public class Utility
     };
 
     public static List<List<string>> dialogSetWithEnemey = new List<List<string>> {
-        new List<string> { "", "Hey! What a nice day ... for rubbery!" },
-        new List<string> { "You", "What's wrong with you man?" },
-        new List<string> { "", "My equipments need to be repaired. Could you please help me fix them?" },
-        new List<string> { "", "I will protect your store for you as a pay back." },
-        new List<string> { "C", "JOIN" }
+        new List<string> { "", "Hey! What a nice day ... for robbery!" },
+        new List<string> { "You", "Yo what's wrong with you man?" },
+        new List<string> { "", "Shut up and give me all your scraps!" },
     };
 }

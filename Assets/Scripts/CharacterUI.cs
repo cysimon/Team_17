@@ -41,7 +41,6 @@ public class CharacterUI : MonoBehaviour
     {
         if (m_character == null)
         {
-            Debug.Log("sdfsfsd");
             m_character = new Character(0, this);
         }
         m_groupLabel.text = "GROUP: " + m_character.m_group.ToString();
@@ -60,7 +59,12 @@ public class CharacterUI : MonoBehaviour
         m_spriteRenderer = spriteObj.GetComponent<SpriteRenderer>();
         m_spriteRenderer.transform.position = new Vector3(6.1f, -2.88f, 0);
         Color temp = m_spriteRenderer.color;
-        temp.a = 0.3f;
+
+        if (m_character.m_group == 1)
+        {
+            temp.a = 0.3f;
+        }
+        
         m_spriteRenderer.color = temp;
     }
 

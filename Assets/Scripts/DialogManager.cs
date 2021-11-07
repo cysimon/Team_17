@@ -136,13 +136,25 @@ public class DialogManager : MonoBehaviour
     private void addTeammateYES(CharacterUI ch)
     {
         m_status = 0;
-        instance.m_teammate.Add(ch.m_character);
-        instance.scraps -= m_other.m_cost;
-        instance.scrapsLable.text = instance.scraps.ToString();
         List<List<string>> newDialogInfo = new List<List<string>> { };
-        newDialogInfo.Add(new List<string> { "You", "Here you go! Nice and clean again!" });
-        newDialogInfo.Add(new List<string> { "", "Many thanks! God bless you." });
-        newDialogInfo.Add(new List<string> { "T", "NEXTROUND-Y" });
+        
+        if (instance.scraps >= m_other.m_cost)
+        {
+            instance.scraps -= m_other.m_cost;
+            instance.scrapsLable.text = instance.scraps.ToString();
+            instance.m_teammate.Add(ch.m_character);
+            newDialogInfo.Add(new List<string> { "You", "Here you go! Nice and clean again!" });
+            newDialogInfo.Add(new List<string> { "", "Many thanks! God bless you." });
+            newDialogInfo.Add(new List<string> { "T", "NEXTROUND-Y" });
+        }
+        else
+        {
+            newDialogInfo.Add(new List<string> { "You", "Oh shit! I don't have enough scraps for your equipment." });
+            newDialogInfo.Add(new List<string> { "You", "I am so sorry man." });
+            newDialogInfo.Add(new List<string> { "", "Ok. F**k you and have a nice day." });
+            newDialogInfo.Add(new List<string> { "T", "NEXTROUND-N" });
+        }
+        
         m_dialogInfo = newDialogInfo;
         curIdx = 0;
         dialogExecute();
@@ -191,7 +203,7 @@ public class DialogManager : MonoBehaviour
             {
                 
                 curCharacter.m_spriteRenderer.transform.localScale = new Vector3(-1, 1, 1);
-                instance.m_roundManager.NextRound();
+                StartCoroutine(waitForNextRound());
             }
             else if (m_dialogInfo[curIdx][1] == "NEXTROUND-N")
             {
@@ -201,5 +213,11 @@ public class DialogManager : MonoBehaviour
                 curCharacter.MoveTo(dest, anime, 3);
             }
         }
+    }
+
+    private IEnumerator waitForNextRound()
+    {
+        yield return new WaitForSeconds(1f);
+        instance.m_roundManager.NextRound();
     }
 }
