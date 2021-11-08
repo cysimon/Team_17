@@ -41,13 +41,14 @@ public class BattleSystem : MonoBehaviour
     public Animator attackAni;
     void Start()
     {
-        battleState = BattleState.START;
-        StartCoroutine(BattleBegin());
+        //battleState = BattleState.START;
+        //StartCoroutine(BattleBegin());
     }
 
-    IEnumerator BattleBegin()
+    public IEnumerator BattleBegin()
     {
-        for(int i = 0; i < 3; i++)
+        battleState = BattleState.START;
+        for (int i = 0; i < 3; i++)
         {
             battleBeginText.gameObject.SetActive(true);
             yield return new WaitForSeconds(.5f);
@@ -69,8 +70,8 @@ public class BattleSystem : MonoBehaviour
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponentInChildren<Unit>();
 
-        //Ö»ÓÐÒ»¸öenemy
-        //ÐèÒª¿¼ÂÇ¼ÓÇ¿enemy
+        //Ö»ï¿½ï¿½Ò»ï¿½ï¿½enemy
+        //ï¿½ï¿½Òªï¿½ï¿½ï¿½Ç¼ï¿½Ç¿enemy
         Character m_enemy = Game.instance.m_enemy[0];
         enemyUnit.unitName = m_enemy.m_name;
         enemyUnit.unitId = -1;
@@ -81,7 +82,7 @@ public class BattleSystem : MonoBehaviour
         enemyUnit.currentWeaponHealth = enemyUnit.maxWeaponHealth;
         enemyUnit.unitDamage = m_enemy.m_weapon.m_power+20;
 
-        //Èç¹û¶àÓÚ3¸ö£¬¿ÉÒÔ¿¼ÂÇÈÃÍæ¼ÒÑ¡Ôñ3¸ö£¬ÏÖÔÚÈ¡Ç°3¸ö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Ç°3ï¿½ï¿½
         maxCharacters = Game.instance.m_teammate.Count;
         //Debug.Log(Game.instance.m_teammate.Count);
         if (maxCharacters >= 3) maxCharacters = 3;
@@ -105,7 +106,7 @@ public class BattleSystem : MonoBehaviour
             teammateUnit[i].currentWeaponHealth = teammateUnit[i].maxWeaponHealth;
             isTeamDeadWeapon[i] = false;
             
-            teammateUnit[i].unitDamage = m_teammate.m_weapon.m_power;
+            teammateUnit[i].unitDamage = m_teammate.m_weapon.m_power * 2;
         }
         enemyUIContainer.SetActive(true);
         enemyHUD.SetHUD(enemyUnit);
@@ -213,7 +214,7 @@ public class BattleSystem : MonoBehaviour
         if (isTeamDeadArmor[i])
         {
             EventBus.Publish<CharacterEvent>(new CharacterEvent(4, Game.instance.m_teammate[i].m_characterUI));
-            //ËÀÁËµÄ¶¯»­
+            //ï¿½ï¿½ï¿½ËµÄ¶ï¿½ï¿½ï¿½
             attackAni = teammateUnit[i].gameObject.GetComponent<Animator>();
             attackAni.SetBool("isDead", true);
             battleBeginText.text = "Teammate " + teammateUnit[i].unitName + " dead!";
@@ -244,8 +245,9 @@ public class BattleSystem : MonoBehaviour
 
             enemyUnit.RestoreWeapon(enemyUnit.maxWeaponHealth/2);
             enemyHUD.SetWeapon(enemyUnit);
-            enemyUnit.RestoreArmor(enemyUnit.maxArmor/4);
-            enemyHUD.SetArmor(enemyUnit);
+            //enemyUnit.RestoreArmor(enemyUnit.maxArmor/4);
+            //enemyHUD.SetArmor(enemyUnit);
+            isEnemyDeadWeapon = false;
         }
         else if (randNum == 0|| randNum == 1)
         {
@@ -311,14 +313,29 @@ public class BattleSystem : MonoBehaviour
 
     void EndBattle()
     {
-        if(battleState == BattleState.WON)
+        foreach (Transform child in playerBattleStation)
+            Destroy(child.gameObject);
+        foreach (Transform child in enemyBattleStation)
+            Destroy(child.gameObject);
+        enemyHUD.gameObject.SetActive(false);
+        for(int i = 0; i < 3; i++)
         {
-            EventBus.Publish<GameEvent>(new GameEvent(1));
+            teammateHUD[i].gameObject.SetActive(false);
+        }
+        
+        for (int i = 0; i < 3; i++)
+        {
+            foreach (Transform child in teammateBattleStations[i])
+                Destroy(child.gameObject);
+        }
+        if (battleState == BattleState.WON)
+        {
+            EventBus.Publish<GameEvent>(new GameEvent(55));
         }else if(battleState == BattleState.LOST)
         {
-            EventBus.Publish<GameEvent>(new GameEvent(2));
+            EventBus.Publish<GameEvent>(new GameEvent(99));
         }
-        SceneManager.LoadScene("RuozhouLab");
+        //SceneManager.LoadScene("RuozhouLab");
     }
 
     IEnumerator PlayerTurn()

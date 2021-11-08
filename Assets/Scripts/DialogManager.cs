@@ -222,7 +222,22 @@ public class DialogManager : MonoBehaviour
             {
                 Debug.Log("进入战斗了卧槽");
                 instance.m_enemy.Add(m_other);
-                SceneManager.LoadScene("YiyangLab");
+                //SceneManager.LoadScene("YiyangLab");
+                if (instance.m_teammate != null)
+                {
+                    for (int i = 0; i < instance.m_teammate.Count; i++)
+                    {
+                        instance.m_teammate[i].m_characterUI.m_spriteRenderer.gameObject.SetActive(false);
+                        instance.m_teammate[i].m_characterUI.gameObject.SetActive(false);
+                    }
+
+                    for (int i = 0; i < instance.m_enemy.Count; i++)
+                    {
+                        instance.m_enemy[i].m_characterUI.m_spriteRenderer.gameObject.SetActive(false);
+                        instance.m_enemy[i].m_characterUI.gameObject.SetActive(false);
+                    }
+                }
+                StartCoroutine(instance.battleSysObj.GetComponent<BattleSystem>().BattleBegin());
             }
             else if (m_dialogInfo[curIdx][1] == "LOSEGAME")
             {

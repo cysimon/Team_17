@@ -75,9 +75,24 @@ public class Game : MonoBehaviour
 
     public GameObject loseGameObj;
 
+    public GameObject winGamePrefab;
+
+    public GameObject winGameObj;
+
+    public GameObject battleSysObj;
+
     public GameObject dayBoardPrefab;
 
     public GameObject dayBoardObj;
+
+    public int GetLevel()
+    {
+        if (instance.scraps > 600)
+            return 3;
+        if (instance.scraps > 400)
+            return 2;
+        return 1;
+    }
 
 
     // Start is called before the first frame update
@@ -200,6 +215,19 @@ public class Game : MonoBehaviour
             //new Character(0)
         };
         instance.m_days += 1;
+
+        if (instance.m_days == 6)
+        {
+            GameObject wingame = Instantiate(winGamePrefab);
+            winGameObj = winGameObj.gameObject;
+            GameObject canvasMain = GameObject.Find("UICanvas");
+            winGameObj.transform.parent = canvasMain.transform;
+            winGameObj.transform.localPosition = new Vector3(0, 0, 0);
+            return;
+        }
+
+        instance.daysLable = GameObject.Find("DaysCounter").GetComponent<Text>();
+
         instance.daysLable.text = m_days.ToString();
         Debug.Log("来了");
         instance.dayBoardObj.SetActive(true);
@@ -224,6 +252,17 @@ public class Game : MonoBehaviour
         else if (eventIn.m_type == 1)
         {
             NextDay();
+        }
+        else if (eventIn.m_type == 55)
+        {
+            //Destroy(instance.battleSysObj.GetComponent<BattleSystem>())
+            //StartCoroutine(waitForNextRound());
+            GameObject wingame = Instantiate(winGamePrefab);
+            winGameObj = wingame;
+            GameObject canvasMain = GameObject.Find("UICanvas");
+            winGameObj.transform.parent = canvasMain.transform;
+            winGameObj.transform.localPosition = new Vector3(0, 0, 0);
+            return;
         }
 
         return;
